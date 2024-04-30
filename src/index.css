@@ -1,3 +1,84 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.login{
+    width: 70px;
+    height: 45px;
+    background-color: gray;
+    padding-top: 10px;
+    padding-left: 5px;
+    border-radius: 10px;
+}
+.search input:focus {
+    outline: none;
+}
+.search{
+    background-color:white;
+    width: 13rem;
+    height: 4rem;
+    padding-left: 1rem;
+    padding-top: 5px;
+    
+}
+.icon_search{
+    width: 50px;
+    height: 50px;
+    background-color: #ff385c;
+    padding: 17px;
+    border-radius: 25px;
+    color: white;
+}
+.image{
+    width: 97% !important;
+    height: 600px !important;
+    position: absolute;
+    margin-left: 20px;
+    margin-right: 20px !important;
+}
+.nav-search{
+    position: relative;
+}
+.carousel{
+    height: 800px;
+}
+.img_kp{
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+}
+.modal {
+    position: absolute;
+    top: calc(100% + 10px); 
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000; 
+  }
+.img_list{
+    width: 25rem;
+    height: 15rem;
+    border-radius: 15px;
+}
+.bt_list{
+    background-color: white;
+    color: gray;
+    border-radius: 20px;
+    border-color: gray;
+}
+.bt_list:hover{
+    background-color: rgb(171, 167, 167);
+    color: white;
+}
+.p_list{
+    color: gray;
+}
+.price_list{
+    padding-left: 35rem;
+    padding-top: 3rem;
+
+}

@@ -34,7 +34,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <Routes>
         <Route
-          path=""
+          path="/"
           element={
             <Responsive
               laptop={<Home />}
@@ -65,9 +65,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             }
           />
         </Route>
-        <Route path="search">
+        <Route path="/search">
           <Route
-            path=":cityName"
+            path=":cityName/:cityId"
             element={
               <Responsive
                 laptop={<RoomList />}
