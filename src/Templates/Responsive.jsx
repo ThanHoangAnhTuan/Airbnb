@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 const Responsive = ({ laptop, tablet, mobile }) => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [component, setComponent] = useState(laptop);
+
   const changeScreen = useCallback(() => {
     setScreenWidth(window.innerWidth);
     if (screenWidth >= 1200) {
@@ -13,14 +14,19 @@ const Responsive = ({ laptop, tablet, mobile }) => {
       setComponent(mobile);
     }
   }, [screenWidth, laptop, tablet, mobile]);
+
   useEffect(() => {
-    window.addEventListener("resize", changeScreen);
+    const handleResize = () => {
+      changeScreen();
+    };
+
+    window.addEventListener("resize", handleResize);
     window.addEventListener("load", changeScreen);
     return () => {
-      window.removeEventListener("resize", changeScreen);
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("load", changeScreen);
     };
-  }, [screenWidth, changeScreen]);
+  }, [changeScreen]);
   return <>{component}</>;
 };
 

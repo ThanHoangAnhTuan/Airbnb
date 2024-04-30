@@ -28,6 +28,7 @@ import TabletUserInfo from "./Pages/UserInfo/TabletUserInfo";
 import MobileUserInfo from "./Pages/UserInfo/MobileUserInfo";
 import TabletUserManagement from "./Pages/UserManagement/TabletUserManagement";
 import MobileUserManagement from "./Pages/UserManagement/MobileUserManagement";
+import Management from "./Templates/Management";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -77,16 +78,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             }
           />
         </Route>
-        <Route
-          path="roommanagement"
-          element={
-            <Responsive
-              laptop={<RoomManagement />}
-              tablet={<TabletRoomManagement />}
-              mobile={<MobileRoomManagement />}
-            />
-          }
-        />
+
         <Route
           path="signin"
           element={
@@ -97,23 +89,55 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             />
           }
         />
+        <Route path="userinfo">
+          <Route
+            path=":userId"
+            element={
+              <Responsive
+                laptop={<UserInfo />}
+                tablet={<TabletUserInfo />}
+                mobile={<MobileUserInfo />}
+              />
+            }
+          />
+        </Route>
         <Route
-          path="userinfo"
-          element={
-            <Responsive
-              laptop={<UserInfo />}
-              tablet={<TabletUserInfo />}
-              mobile={<MobileUserInfo />}
-            />
-          }
-        />
+          path="management"
+          element={<Management />}>
+          <Route
+            path="user"
+            element={<UserManagement />}
+          />
+          <Route
+            path="room"
+            element={<RoomManagement />}
+          />
+          <Route
+            path="bookroom"
+            // element={< />}
+          />
+          <Route
+            path="location"
+            // element={< />}
+          />
+        </Route>
         <Route
-          path="usermanagement"
+          path="user-management"
           element={
             <Responsive
               laptop={<UserManagement />}
               tablet={<TabletUserManagement />}
               mobile={<MobileUserManagement />}
+            />
+          }
+        />
+        <Route
+          path="room-management"
+          element={
+            <Responsive
+              laptop={<RoomManagement />}
+              tablet={<TabletRoomManagement />}
+              mobile={<MobileRoomManagement />}
             />
           }
         />
