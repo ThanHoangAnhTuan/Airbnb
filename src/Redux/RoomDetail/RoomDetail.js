@@ -92,7 +92,7 @@ export const postCommentByRoomIdApi = (data) => {
         method: "POST",
         headers: {
           tokenCybersoft: TOKEN,
-          token: localStorage.getItem("accesstoken"),
+          token: localStorage.getItem("user_id"),
         },
         data: data,
       });

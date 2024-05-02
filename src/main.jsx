@@ -29,6 +29,7 @@ import MobileUserInfo from "./Pages/UserInfo/MobileUserInfo";
 import TabletUserManagement from "./Pages/UserManagement/TabletUserManagement";
 import MobileUserManagement from "./Pages/UserManagement/MobileUserManagement";
 import Management from "./Templates/Management";
+import LocationManagement from "./Pages/LocationManagement/LocationManagement";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -54,31 +55,26 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             />
           }
         />
-        <Route path="detail">
-          <Route
-            path=":id"
-            element={
-              <Responsive
-                laptop={<RoomDetail />}
-                tablet={<TabletRoomDetail />}
-                mobile={<MobileRoomDetail />}
-              />
-            }
-          />
-        </Route>
-        <Route path="search">
-          <Route
-            path=":cityName"
-            element={
-              <Responsive
-                laptop={<RoomList />}
-                tablet={<TabletRoomList />}
-                mobile={<MobileRoomList />}
-              />
-            }
-          />
-        </Route>
-
+        <Route
+          path="detail/:id"
+          element={
+            <Responsive
+              laptop={<RoomDetail />}
+              tablet={<TabletRoomDetail />}
+              mobile={<MobileRoomDetail />}
+            />
+          }
+        />
+        <Route
+          path="search/:cityName"
+          element={
+            <Responsive
+              laptop={<RoomList />}
+              tablet={<TabletRoomList />}
+              mobile={<MobileRoomList />}
+            />
+          }
+        />
         <Route
           path="signin"
           element={
@@ -89,18 +85,16 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             />
           }
         />
-        <Route path="userinfo">
-          <Route
-            path=":userId"
-            element={
-              <Responsive
-                laptop={<UserInfo />}
-                tablet={<TabletUserInfo />}
-                mobile={<MobileUserInfo />}
-              />
-            }
-          />
-        </Route>
+        <Route
+          path="userinfo/:userId"
+          element={
+            <Responsive
+              laptop={<UserInfo />}
+              tablet={<TabletUserInfo />}
+              mobile={<MobileUserInfo />}
+            />
+          }
+        />
         <Route
           path="management"
           element={<Management />}>
@@ -118,7 +112,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           />
           <Route
             path="location"
-            // element={< />}
+            element={<LocationManagement/>}
           />
         </Route>
         <Route

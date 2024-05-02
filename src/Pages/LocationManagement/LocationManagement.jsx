@@ -1,29 +1,27 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import {
-  createUserByIdApi,
-  getUserBySearchApi,
-  getUserListApiByPageIndex,
-  putUserByIdApi,
-  removeUserByIdApi,
-} from "../../Redux/UserManagement/UserManagement";
+  createLocationByIdApi,
+  getLocationBySearchApi,
+  getLocationListApiByPageIndex,
+  putLocationByIdApi,
+  removeLocationByIdApi,
+} from "../../Redux/LocationManagement/LocationManagement";
 
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Modal } from "antd";
 import { Calendar } from "primereact/calendar";
 import { Toast } from "primereact/toast";
 
-const UserManagement = () => {
+const LocationManagement = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [pageIndex, setPageIndex] = useState(1);
   let [searchParams, setSearchParams] = useSearchParams();
   const keyWordRef = useRef("");
-  const { userListByPageIndex, paginator, searchUserByEmail } = useSelector(
-    (state) => state.UserManagement
-  );
-
-  const [userInfoUpdate, setUserInfoUpdate] = useState({
+  const { locationListByPageIndex, paginator, searchLocationByEmail } =
+    useSelector((state) => state.LocationManagement);
+  const [locationInfoUpdate, setLocationInfoUpdate] = useState({
     avatar: "",
     birthday: "",
     email: "",
@@ -42,7 +40,7 @@ const UserManagement = () => {
     { avatar, birthday, email, gender, id, name, password, phone, role },
     type
   ) => {
-    setUserInfoUpdate({
+    setLocationInfoUpdate({
       avatar,
       birthday,
       email,
@@ -63,7 +61,9 @@ const UserManagement = () => {
 
   const handleOk = async () => {
     if (typeModal === "update") {
-      const result = await dispatch(putUserByIdApi(userInfoUpdate, pageIndex));
+      const result = await dispatch(
+        putLocationByIdApi(locationInfoUpdate, pageIndex)
+      );
       if (result.data.statusCode === 200) {
         toast.current.show({
           severity: "success",
@@ -72,9 +72,9 @@ const UserManagement = () => {
         });
         const search = searchParams.get("keyword");
         if (search) {
-          await dispatch(getUserBySearchApi(search));
+          await dispatch(getLocationBySearchApi(search));
         } else {
-          await dispatch(getUserListApiByPageIndex(pageIndex));
+          await dispatch(getLocationListApiByPageIndex(pageIndex));
         }
         setOpen(false);
       } else {
@@ -87,7 +87,7 @@ const UserManagement = () => {
       }
     } else {
       const result = await dispatch(
-        createUserByIdApi(userInfoUpdate, pageIndex)
+        createLocationByIdApi(locationInfoUpdate, pageIndex)
       );
       if (result.response?.status === 400) {
         toast.current.show({
@@ -107,8 +107,8 @@ const UserManagement = () => {
     }
   };
 
-  const handleRemoveUser = async (data) => {
-    const result = await dispatch(removeUserByIdApi(data, pageIndex));
+  const handleRemoveLocation = async (data) => {
+    const result = await dispatch(removeLocationByIdApi(data, pageIndex));
     if (result.response?.status === 403) {
       toast.current.show({
         severity: "error",
@@ -123,10 +123,10 @@ const UserManagement = () => {
       });
       const search = searchParams.get("keyword");
       if (search) {
-        navigate("/management/user");
+        navigate("/management/location");
         window.location.reload();
       } else {
-        await dispatch(getUserListApiByPageIndex(pageIndex));
+        await dispatch(getLocationListApiByPageIndex(pageIndex));
       }
     }
   };
@@ -134,13 +134,13 @@ const UserManagement = () => {
   function handleChange(e) {
     if (e.target.name === "gender") {
       const setGender = e.target.value === "nam" ? true : false;
-      setUserInfoUpdate({
-        ...userInfoUpdate,
+      setLocationInfoUpdate({
+        ...locationInfoUpdate,
         [e.target.name]: setGender,
       });
     } else {
-      setUserInfoUpdate({
-        ...userInfoUpdate,
+      setLocationInfoUpdate({
+        ...locationInfoUpdate,
         [e.target.name]: e.target.value,
       });
     }
@@ -149,10 +149,10 @@ const UserManagement = () => {
   useEffect(() => {
     const search = searchParams.get("keyword");
     if (search) {
-      dispatch(getUserBySearchApi(search));
+      dispatch(getLocationBySearchApi(search));
     } else {
-      dispatch(getUserBySearchApi(search));
-      dispatch(getUserListApiByPageIndex(pageIndex));
+      dispatch(getLocationBySearchApi(search));
+      dispatch(getLocationListApiByPageIndex(pageIndex));
     }
   }, [dispatch, searchParams, pageIndex]);
 
@@ -250,78 +250,78 @@ const UserManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {Object.keys(searchUserByEmail).length > 0 && (
+            {Object.keys(searchLocationByEmail).length > 0 && (
               <tr
-                key={searchUserByEmail.id}
+                key={searchLocationByEmail.id}
                 className="border">
                 <td>{1}</td>
-                <td>{searchUserByEmail.id}</td>
-                <td>{searchUserByEmail.name}</td>
+                <td>{searchLocationByEmail.id}</td>
+                <td>{searchLocationByEmail.name}</td>
                 <td>
-                  {searchUserByEmail.avatar && (
+                  {searchLocationByEmail.avatar && (
                     <img
                       className="h-20 w-20 object-contain rounded-full"
-                      src={searchUserByEmail.avatar}
+                      src={searchLocationByEmail.avatar}
                       alt="avatar"
                     />
                   )}
-                  {!searchUserByEmail.avatar && (
+                  {!searchLocationByEmail.avatar && (
                     <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
                   )}
                 </td>
-                <td>{searchUserByEmail.birthday}</td>
-                <td>{searchUserByEmail.gender ? "Nam" : "Nữ"}</td>
-                <td>{searchUserByEmail.phone}</td>
-                <td>{searchUserByEmail.role}</td>
+                <td>{searchLocationByEmail.birthday}</td>
+                <td>{searchLocationByEmail.gender ? "Nam" : "Nữ"}</td>
+                <td>{searchLocationByEmail.phone}</td>
+                <td>{searchLocationByEmail.role}</td>
                 <td>
                   <button
                     type="button"
                     className="bg-blue-500 text-white px-5 py-1 mr-3"
-                    onClick={() => showModal(searchUserByEmail, "update")}>
+                    onClick={() => showModal(searchLocationByEmail, "update")}>
                     Sửa
                   </button>
                   <button
                     className="bg-red-500 text-white px-5 py-1"
-                    onClick={() => handleRemoveUser(searchUserByEmail)}>
+                    onClick={() => handleRemoveLocation(searchLocationByEmail)}>
                     Xoá
                   </button>
                 </td>
               </tr>
             )}
-            {Object.keys(searchUserByEmail).length === 0 &&
-              userListByPageIndex.map((user, index) => {
+            {Object.keys(searchLocationByEmail).length === 0 &&
+              locationListByPageIndex.map((location, index) => {
                 return (
                   <tr
-                    key={user.id}
+                    key={location.id}
                     className="border">
                     <td>{index + 1}</td>
-                    <td>{user.id}</td>
-                    <td>{user.name}</td>
+                    <td>{location.id}</td>
+                    <td>{location.name}</td>
                     <td>
-                      {user.avatar && (
+                      {location.avatar && (
                         <img
                           className="h-20 w-20 object-contain rounded-full"
-                          src={user.avatar}
+                          src={location.avatar}
                           alt="avatar"
                         />
                       )}
-                      {!user.avatar && (
+                      {!location.avatar && (
                         <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
                       )}
                     </td>
-                    <td>{user.birthday}</td>
-                    <td>{user.gender ? "Nam" : "Nữ"}</td>
-                    <td>{user.phone}</td>
-                    <td>{user.role}</td>
+                    <td>{location.birthday}</td>
+                    <td>{location.gender ? "Nam" : "Nữ"}</td>
+                    <td>{location.phone}</td>
+                    <td>{location.role}</td>
                     <td>
                       <button
                         className="bg-blue-500 text-white px-5 py-1 mr-3"
-                        onClick={() => showModal(user, "update")}>
+                        onClick={() => showModal(location, "update")}>
                         Sửa
                       </button>
                       <button
                         className="bg-red-500 text-white px-5 py-1"
-                        onClick={() => handleRemoveUser(user)}>
+                        onClick={() => handleRemoveLocation(location)}>
                         Xoá
                       </button>
                     </td>
@@ -342,7 +342,7 @@ const UserManagement = () => {
           <div className="flex flex-row items-center justify-between mb-3">
             <label htmlFor="name">Name</label>
             <input
-              value={userInfoUpdate.name}
+              value={locationInfoUpdate.name}
               name="name"
               type="text"
               className="ml-5 border outline-none w-[380px] p-3"
@@ -352,18 +352,8 @@ const UserManagement = () => {
           <div className="flex flex-row items-center justify-between mb-3">
             <label htmlFor="email">Email</label>
             <input
-              value={userInfoUpdate.email}
+              value={locationInfoUpdate.email}
               name="email"
-              type="text"
-              className="ml-5 border outline-none w-[380px] p-3"
-              onChange={(e) => handleChange(e)}
-            />
-          </div>
-          <div className="flex flex-row items-center justify-between mb-3">
-            <label htmlFor="password">Password</label>
-            <input
-              value={userInfoUpdate.password}
-              name="password"
               type="text"
               className="ml-5 border outline-none w-[380px] p-3"
               onChange={(e) => handleChange(e)}
@@ -372,7 +362,7 @@ const UserManagement = () => {
           <div className="flex flex-row items-center justify-between mb-3">
             <label htmlFor="birthday">Birth day</label>
             <Calendar
-              value={new Date(userInfoUpdate.birthday)}
+              value={new Date(locationInfoUpdate.birthday)}
               name="birthday"
               className="w-[380px]"
               onChange={(e) => handleChange(e)}
@@ -382,7 +372,7 @@ const UserManagement = () => {
           <div className="flex flex-row items-center justify-between mb-3">
             <label htmlFor="phone">Phone</label>
             <input
-              value={userInfoUpdate.phone}
+              value={locationInfoUpdate.phone}
               name="phone"
               type="text"
               className="ml-5 border outline-none w-[380px] p-3"
@@ -401,7 +391,7 @@ const UserManagement = () => {
                 <input
                   value="nam"
                   id="nam"
-                  checked={userInfoUpdate.gender}
+                  checked={locationInfoUpdate.gender}
                   name="gender"
                   type="radio"
                   onChange={(e) => handleChange(e)}
@@ -416,7 +406,7 @@ const UserManagement = () => {
                 <input
                   value="nu"
                   id="nu"
-                  checked={!userInfoUpdate.gender}
+                  checked={!locationInfoUpdate.gender}
                   name="gender"
                   type="radio"
                   onChange={(e) => handleChange(e)}
@@ -429,7 +419,7 @@ const UserManagement = () => {
             <select
               name="role"
               className="w-[380px] outline-none border p-3"
-              defaultValue={userInfoUpdate.role}
+              defaultValue={locationInfoUpdate.role}
               onChange={(e) => handleChange(e)}
               id="role">
               <option value="ADMIN">Amin</option>
@@ -439,8 +429,8 @@ const UserManagement = () => {
         </Modal>
         <Toast ref={toast} />
       </div>
-      {Object.keys(searchUserByEmail).length === 0 &&
-        userListByPageIndex.length > 0 && (
+      {Object.keys(searchLocationByEmail).length === 0 &&
+        locationListByPageIndex.length > 0 && (
           <div>
             <ul className="flex justify-center">{renderPaginator()}</ul>
           </div>
@@ -449,4 +439,4 @@ const UserManagement = () => {
   );
 };
 
-export default UserManagement;
+export default LocationManagement;

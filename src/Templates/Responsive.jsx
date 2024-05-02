@@ -1,33 +1,21 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const Responsive = ({ laptop, tablet, mobile }) => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const [component, setComponent] = useState(laptop);
-
-  const changeScreen = useCallback(() => {
-    setScreenWidth(window.innerWidth);
-    if (screenWidth >= 1200) {
-      setComponent(laptop);
-    } else if (screenWidth >= 768 && screenWidth < 1200) {
-      setComponent(tablet);
-    } else {
-      setComponent(mobile);
-    }
-  }, [screenWidth, laptop, tablet, mobile]);
 
   useEffect(() => {
-    const handleResize = () => {
-      changeScreen();
-    };
+    const handleWindowResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", handleWindowResize);
+    return () => window.removeEventListener("resize", handleWindowResize);
+  }, [screenWidth]);
 
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("load", changeScreen);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("load", changeScreen);
-    };
-  }, [changeScreen]);
-  return <>{component}</>;
+  return (
+    <>
+      {screenWidth >= 1200 && laptop}
+      {screenWidth >= 768 && screenWidth < 1200 && tablet}
+      {screenWidth < 768 && mobile}
+    </>
+  );
 };
 
 export default Responsive;
