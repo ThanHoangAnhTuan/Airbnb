@@ -1,45 +1,51 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import {
-  createLocationByIdApi,
-  getLocationBySearchApi,
-  getLocationListApiByPageIndex,
-  putLocationByIdApi,
-  removeLocationByIdApi,
-} from "../../Redux/LocationManagement/LocationManagement";
+  createBookRoomByIdApi,
+  getBookRoomBySearchApi,
+  getBookRoomListApiByPageIndex,
+  putBookRoomByIdApi,
+  removeBookRoomByIdApi,
+} from "../../Redux/BookRoomManagement/BookRoomManagement";
 
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Modal } from "antd";
+import { Calendar } from "primereact/calendar";
 import { Toast } from "primereact/toast";
 
-const LocationManagement = () => {
+const BookRoomManagement = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [pageIndex, setPageIndex] = useState(1);
   let [searchParams, setSearchParams] = useSearchParams();
   const keyWordRef = useRef("");
-  const { locationListByPageIndex, paginator, searchLocationByName } =
-    useSelector((state) => state.LocationManagement);
+  const { bookRoomListByPageIndex, paginator, searchBookRoomByID } =
+    useSelector((state) => state.BookRoomManagement);
   const search = searchParams.get("keyword");
 
-  const [locationInfoUpdate, setLocationInfoUpdate] = useState({
-    tenViTri: "",
-    tinhThanh: "",
-    quocGia: "",
+  const [bookRoomInfoUpdate, setBookRoomInfoUpdate] = useState({
     id: 0,
-    hinhAnh: "",
+    maPhong: 0,
+    ngayDen: "",
+    ngayDi: "",
+    soLuongKhach: 0,
+    maNguoiDung: 0,
   });
   const [open, setOpen] = useState(false);
   const toast = useRef(null);
   let [typeModal, setTypeModal] = useState("");
 
-  const showModal = ({ tenViTri, tinhThanh, quocGia, id, hinhAnh }, type) => {
-    setLocationInfoUpdate({
-      tenViTri,
-      tinhThanh,
-      quocGia,
+  const showModal = (
+    { id, maPhong, ngayDen, ngayDi, soLuongKhach, maNguoiDung },
+    type
+  ) => {
+    setBookRoomInfoUpdate({
       id,
-      hinhAnh,
+      maPhong,
+      ngayDen,
+      ngayDi,
+      soLuongKhach,
+      maNguoiDung,
     });
     setTypeModal(type);
     setOpen(true);
@@ -52,7 +58,7 @@ const LocationManagement = () => {
   const handleOk = async () => {
     if (typeModal === "update") {
       const result = await dispatch(
-        putLocationByIdApi(locationInfoUpdate, pageIndex)
+        putBookRoomByIdApi(bookRoomInfoUpdate, pageIndex)
       );
       if (result.data?.statusCode === 200) {
         toast.current.show({
@@ -62,9 +68,9 @@ const LocationManagement = () => {
         });
         const search = searchParams.get("keyword");
         if (search) {
-          await dispatch(getLocationBySearchApi(search));
+          await dispatch(getBookRoomBySearchApi(search));
         } else {
-          await dispatch(getLocationListApiByPageIndex(pageIndex));
+          await dispatch(getBookRoomListApiByPageIndex(pageIndex));
         }
         setOpen(false);
       } else {
@@ -77,7 +83,7 @@ const LocationManagement = () => {
       }
     } else {
       const result = await dispatch(
-        createLocationByIdApi(locationInfoUpdate, pageIndex)
+        createBookRoomByIdApi(bookRoomInfoUpdate, pageIndex)
       );
       if (result.response?.status === 400) {
         toast.current.show({
@@ -97,8 +103,8 @@ const LocationManagement = () => {
     }
   };
 
-  const handleRemoveLocation = async (data) => {
-    const result = await dispatch(removeLocationByIdApi(data, pageIndex));
+  const handleRemoveBookRoom = async (data) => {
+    const result = await dispatch(removeBookRoomByIdApi(data, pageIndex));
     if (result.response?.status === 403) {
       toast.current.show({
         severity: "error",
@@ -113,26 +119,27 @@ const LocationManagement = () => {
       });
       const search = searchParams.get("keyword");
       if (search) {
-        navigate("/management/location");
+        navigate("/management/bookroom");
         window.location.reload();
       } else {
-        await dispatch(getLocationListApiByPageIndex(pageIndex));
+        await dispatch(getBookRoomListApiByPageIndex(pageIndex));
       }
     }
   };
 
   function handleChange(e) {
-    setLocationInfoUpdate({
-      ...locationInfoUpdate,
+    setBookRoomInfoUpdate({
+      ...bookRoomInfoUpdate,
       [e.target.name]: e.target.value,
     });
   }
 
   useEffect(() => {
+    console.log(search);
     if (search) {
-      dispatch(getLocationBySearchApi(search));
+      dispatch(getBookRoomBySearchApi(search));
     } else {
-      dispatch(getLocationListApiByPageIndex(pageIndex));
+      dispatch(getBookRoomListApiByPageIndex(pageIndex));
     }
   }, [dispatch, search, pageIndex]);
 
@@ -182,16 +189,17 @@ const LocationManagement = () => {
         onClick={() =>
           showModal(
             {
-              tenViTri: "",
-              tinhThanh: "",
-              quocGia: "",
               id: 0,
-              hinhAnh: "",
+              maPhong: 0,
+              ngayDen: "",
+              ngayDi: "",
+              soLuongKhach: 0,
+              maNguoiDung: 0,
             },
             "create"
           )
         }>
-        Thêm vị trí
+        Thêm đặt phòng
       </button>
       <div className="flex my-5 w-[800px] border items-center rounded-full overflow-hidden pl-5 pr-2 h-[50px]">
         <form
@@ -201,7 +209,7 @@ const LocationManagement = () => {
             className="w-full outline-none"
             type="text"
             onChange={handleChangeSearch}
-            placeholder="Nhập vào tên vị trí"
+            placeholder="Nhập vào id phòng"
           />
           <button
             type="submit"
@@ -216,83 +224,63 @@ const LocationManagement = () => {
             <tr className="border">
               <th className="text-start">STT</th>
               <th className="text-start">Id</th>
-              <th className="text-start">Tên vị trí</th>
-              <th className="text-start">Hình ảnh</th>
-              <th className="text-start">Tỉnh thành</th>
-              <th className="text-start">Quốc gia</th>
+              <th className="text-start">Mã phòng</th>
+              <th className="text-start">Ngày đến</th>
+              <th className="text-start">Ngày đi</th>
+              <th className="text-start">Số lượng khách</th>
+              <th className="text-start">Mã người dùng</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {searchLocationByName.length > 0 &&
-              searchLocationByName.map((location, index) => (
-                <tr
-                  key={location.id}
-                  className="border">
-                  <td>{index + 1}</td>
-                  <td>{location.id}</td>
-                  <td>{location.tenViTri}</td>
-                  <td>
-                    {location.hinhAnh && (
-                      <img
-                        className="h-20 w-20 object-contain rounded-full"
-                        src={location.hinhAnh}
-                        alt="hinhAnh"
-                      />
-                    )}
-                    {!location.hinhAnh && (
-                      <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
-                    )}
-                  </td>
-                  <td>{location.tinhThanh}</td>
-                  <td>{location.quocGia}</td>
-                  <td>
-                    <button
-                      type="button"
-                      className="bg-blue-500 text-white px-5 py-1 mr-3"
-                      onClick={() => showModal(location, "update")}>
-                      Sửa
-                    </button>
-                    <button
-                      className="bg-red-500 text-white px-5 py-1"
-                      onClick={() => handleRemoveLocation(location)}>
-                      Xoá
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            {(!search || searchLocationByName.length === 0) &&
-              locationListByPageIndex.map((location, index) => {
+            {Object.keys(searchBookRoomByID).length > 0 && (
+              <tr
+                key={searchBookRoomByID.id}
+                className="border">
+                <td>{1}</td>
+                <td>{searchBookRoomByID.id}</td>
+                <td>{searchBookRoomByID.maPhong}</td>
+                <td>{searchBookRoomByID.ngayDen}</td>
+                <td>{searchBookRoomByID.ngayDi}</td>
+                <td>{searchBookRoomByID.soLuongKhach}</td>
+                <td>{searchBookRoomByID.maNguoiDung}</td>
+                <td>
+                  <button
+                    type="button"
+                    className="bg-blue-500 text-white px-5 py-1 mr-3"
+                    onClick={() => showModal(searchBookRoomByID, "update")}>
+                    Sửa
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-5 py-1"
+                    onClick={() => handleRemoveBookRoom(searchBookRoomByID)}>
+                    Xoá
+                  </button>
+                </td>
+              </tr>
+            )}
+            {(!search || Object.keys(searchBookRoomByID).length === 0) &&
+              bookRoomListByPageIndex.map((bookRoom, index) => {
                 return (
                   <tr
-                    key={location.id}
+                    key={bookRoom.id}
                     className="border">
                     <td>{index + 1}</td>
-                    <td>{location.id}</td>
-                    <td>{location.tenViTri}</td>
-                    <td>
-                      {location.hinhAnh && (
-                        <img
-                          className="h-20 w-20 object-contain rounded-full"
-                          src={location.hinhAnh}
-                          alt="hinhAnh"
-                        />
-                      )}
-                      {!location.hinhAnh && (
-                        <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
-                      )}
-                    </td>
-                    <td>{location.tinhThanh}</td>
-                    <td>{location.quocGia}</td>
+                    <td>{bookRoom.id}</td>
+                    <td>{bookRoom.maPhong}</td>
+                    <td>{bookRoom.ngayDen}</td>
+                    <td>{bookRoom.ngayDi}</td>
+                    <td>{bookRoom.soLuongKhach}</td>
+                    <td>{bookRoom.maNguoiDung}</td>
                     <td>
                       <button
                         className="bg-blue-500 text-white px-5 py-1 mr-3"
-                        onClick={() => showModal(location, "update")}>
+                        onClick={() => showModal(bookRoom, "update")}>
                         Sửa
                       </button>
                       <button
                         className="bg-red-500 text-white px-5 py-1"
-                        onClick={() => handleRemoveLocation(location)}>
+                        onClick={() => handleRemoveBookRoom(bookRoom)}>
                         Xoá
                       </button>
                     </td>
@@ -304,47 +292,57 @@ const LocationManagement = () => {
         <Modal
           title={
             typeModal === "create"
-              ? "Thêm vị trí"
-              : "Chỉnh sửa thông tin vị trí"
+              ? "Thêm đặt phòng"
+              : "Chỉnh sửa thông tin phòng đã đặt"
           }
           open={open}
           onOk={handleOk}
           onCancel={handleCancel}>
           <div className="flex flex-row items-center justify-between mb-3">
-            <label htmlFor="tenViTri">Tên vị trí</label>
+            <label htmlFor="maPhong">Mã phòng</label>
             <input
-              value={locationInfoUpdate.tenViTri}
-              name="tenViTri"
+              value={bookRoomInfoUpdate.maPhong}
+              name="maPhong"
               type="text"
               className="ml-5 border outline-none w-[380px] p-3"
               onChange={(e) => handleChange(e)}
             />
           </div>
           <div className="flex flex-row items-center justify-between mb-3">
-            <label htmlFor="tinhThanh">Tỉnh thành</label>
+            <label htmlFor="ngayDen">Ngày đến</label>
+            <Calendar
+              value={new Date(bookRoomInfoUpdate.ngayDen)}
+              name="ngayDen"
+              className="w-[380px]"
+              onChange={(e) => handleChange(e)}
+              dateFormat="dd/mm/yy"
+            />
+          </div>
+          <div className="flex flex-row items-center justify-between mb-3">
+            <label htmlFor="ngayDi">Ngày đi</label>
+            <Calendar
+              value={new Date(bookRoomInfoUpdate.ngayDi)}
+              name="ngayDi"
+              className="w-[380px]"
+              onChange={(e) => handleChange(e)}
+              dateFormat="dd/mm/yy"
+            />
+          </div>
+          <div className="flex flex-row items-center justify-between mb-3">
+            <label htmlFor="soLuongKhach">Số lượng khác</label>
             <input
-              value={locationInfoUpdate.tinhThanh}
-              name="tinhThanh"
+              value={bookRoomInfoUpdate.soLuongKhach}
+              name="soLuongKhach"
               type="text"
               className="ml-5 border outline-none w-[380px] p-3"
               onChange={(e) => handleChange(e)}
             />
           </div>
           <div className="flex flex-row items-center justify-between mb-3">
-            <label htmlFor="quocGia">Quốc gia</label>
+            <label htmlFor="maNguoiDung">Mã người dùng</label>
             <input
-              value={locationInfoUpdate.quocGia}
-              name="quocGia"
-              type="text"
-              className="ml-5 border outline-none w-[380px] p-3"
-              onChange={(e) => handleChange(e)}
-            />
-          </div>
-          <div className="flex flex-row items-center justify-between mb-3">
-            <label htmlFor="hinhAnh">Hình ảnh</label>
-            <input
-              value={locationInfoUpdate.hinhAnh}
-              name="hinhAnh"
+              value={bookRoomInfoUpdate.maNguoiDung}
+              name="maNguoiDung"
               type="text"
               className="ml-5 border outline-none w-[380px] p-3"
               onChange={(e) => handleChange(e)}
@@ -353,8 +351,8 @@ const LocationManagement = () => {
         </Modal>
         <Toast ref={toast} />
       </div>
-      {searchLocationByName.length === 0 &&
-        locationListByPageIndex.length > 0 && (
+      {Object.keys(searchBookRoomByID).length === 0 &&
+        bookRoomListByPageIndex.length > 0 && (
           <div>
             <ul className="flex justify-center">{renderPaginator()}</ul>
           </div>
@@ -363,4 +361,4 @@ const LocationManagement = () => {
   );
 };
 
-export default LocationManagement;
+export default BookRoomManagement;

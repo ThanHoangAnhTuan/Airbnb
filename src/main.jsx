@@ -3,7 +3,6 @@ import "./index.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import Register from "./Pages/Register/Register";
-import RoomManagement from "./Pages/RoomManagement/RoomManagement";
 import RoomDetail from "./Pages/RoomDetail/RoomDetail";
 import RoomList from "./Pages/RoomList/RoomList";
 import SignIn from "./Pages/SignIn/SignIn";
@@ -20,16 +19,14 @@ import TabletRoomDetail from "./Pages/RoomDetail/TabletRoomDetail";
 import MobileRoomDetail from "./Pages/RoomDetail/MobileRoomDetail";
 import TabletRoomList from "./Pages/RoomList/TabletRoomList";
 import MobileRoomList from "./Pages/RoomList/MobileRoomList";
-import TabletRoomManagement from "./Pages/RoomManagement/TabletRoomManagement";
-import MobileRoomManagement from "./Pages/RoomManagement/MobileRoomManagement";
 import TabletSignIn from "./Pages/SignIn/TabletSignIn";
 import MobileSignIn from "./Pages/SignIn/MobileSignIn";
 import TabletUserInfo from "./Pages/UserInfo/TabletUserInfo";
 import MobileUserInfo from "./Pages/UserInfo/MobileUserInfo";
-import TabletUserManagement from "./Pages/UserManagement/TabletUserManagement";
-import MobileUserManagement from "./Pages/UserManagement/MobileUserManagement";
 import Management from "./Templates/Management";
 import LocationManagement from "./Pages/LocationManagement/LocationManagement";
+import RoomManagement from "./Pages/RoomManagement/RoomManagement";
+import BookRoomManagement from "./Pages/BookRoomManagement/BookRoomManagement";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -103,38 +100,18 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             element={<UserManagement />}
           />
           <Route
+            path="location"
+            element={<LocationManagement />}
+          />
+          <Route
             path="room"
             element={<RoomManagement />}
           />
           <Route
             path="bookroom"
-            // element={< />}
-          />
-          <Route
-            path="location"
-            element={<LocationManagement/>}
+            element={<BookRoomManagement />}
           />
         </Route>
-        <Route
-          path="user-management"
-          element={
-            <Responsive
-              laptop={<UserManagement />}
-              tablet={<TabletUserManagement />}
-              mobile={<MobileUserManagement />}
-            />
-          }
-        />
-        <Route
-          path="room-management"
-          element={
-            <Responsive
-              laptop={<RoomManagement />}
-              tablet={<TabletRoomManagement />}
-              mobile={<MobileRoomManagement />}
-            />
-          }
-        />
         <Route
           path="*"
           element={<Navigate to={""} />}

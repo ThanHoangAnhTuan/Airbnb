@@ -5,7 +5,7 @@ import {
   getUserByIdApi,
   putUserByIdApi,
 } from "../../Redux/UserInfo/UserInfo";
-import { useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { Modal } from "antd";
 import "primeicons/primeicons.css";
@@ -24,6 +24,14 @@ const UserInfo = () => {
   const { userInfo, bookedRoom, bookedRoomDetail } = useSelector(
     (state) => state.UserInfo
   );
+  const [isOpen, setIsOpen] = useState(false);
+  const token = localStorage.getItem("user_id");
+  const isLogin = token ? true : false;
+  let decoded;
+  if (token) {
+    decoded = JSON.parse(atob(token?.split(".")[1]));
+  }
+  const navigate = useNavigate();
   const [userInfoUpdate, setUserInfoUpdate] = useState({
     avatar: "",
     birthday: "",
@@ -118,6 +126,76 @@ const UserInfo = () => {
 
   return (
     <PrimeReactProvider>
+      <header className="px-20">
+        <nav className="flex items-center justify-between pt-5 px-10 pb-10">
+          <div className="flex">
+            <NavLink
+              to="/"
+              className="text-4xl text-pink-500">
+              <i className="fa-brands fa-airbnb"></i>
+              <span> airbnb</span>
+            </NavLink>
+          </div>
+          <div className="flex items-center text-black ">
+            <NavLink className="mx-5 text-lg">Nơi ở</NavLink>
+            <NavLink className="mx-5 text-lg">Trải nghiệm</NavLink>
+            <NavLink className="mx-5 text-lg">Trải nghiệm trực tuyến</NavLink>
+          </div>
+          <div className="flex items-center justify-between text-black">
+            <NavLink className="text-lg">Đón tiếp khách</NavLink>
+            <NavLink className="mx-5">
+              {" "}
+              <i className="fa-solid fa-globe"></i>
+            </NavLink>
+            <div
+              className="relative cursor-pointer flex items-center justify-around w-20 h-12 bg-gray-300 rounded-xl"
+              onClick={() => setIsOpen(!isOpen)}>
+              {!isLogin && <i className="fa-solid fa-bars"></i>}
+              <i className="fa-solid fa-user"></i>
+              {isOpen && (
+                <div className="flex transition-all flex-col w-40 absolute right-0 top-full bg-white text-black shadow-[0_5px_15px_rgba(0,0,0,0.3)]">
+                  {!isLogin && (
+                    <>
+                      <NavLink
+                        to="/register"
+                        className={"px-5 py-3 hover:bg-gray-300"}>
+                        Đăng ký
+                      </NavLink>
+                      <NavLink
+                        to="/signin"
+                        className={"px-5 py-3 hover:bg-gray-300"}>
+                        Đăng nhập
+                      </NavLink>
+                    </>
+                  )}
+                  {isLogin && (
+                    <>
+                      <button
+                        className="px-5 py-3 hover:bg-gray-300 text-left"
+                        onClick={() => {
+                          localStorage.removeItem("user_id");
+                          navigate("/");
+                        }}>
+                        Đăng xuất
+                      </button>
+                      <NavLink
+                        to={`/userinfo/${decoded.id}`}
+                        className={"px-5 py-3 hover:bg-gray-300"}>
+                        Tài khoản
+                      </NavLink>
+                    </>
+                  )}
+                  <NavLink
+                    to={`/management/user`}
+                    className={"px-5 py-3 hover:bg-gray-300"}>
+                    Quản lý
+                  </NavLink>
+                </div>
+              )}
+            </div>
+          </div>
+        </nav>
+      </header>
       <div className="flex gap-20 px-48 py-10">
         <div className="w-1/3 border p-5 h-fit">
           <div className="flex flex-col items-center">

@@ -55,7 +55,7 @@ const MobileHome = () => {
 
   return (
     <div>
-      <h1>Tablet</h1>
+      <h1>Mobile</h1>
       <div className="bg-black carousel">
         <Header />
         <img

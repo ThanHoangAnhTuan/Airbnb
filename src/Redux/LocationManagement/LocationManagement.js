@@ -5,7 +5,7 @@ import { TOKEN } from "../../util/config";
 const initialState = {
   locationListByPageIndex: [],
   paginator: 0,
-  searchLocationByEmail: {},
+  searchLocationByName: [],
 };
 
 const LocationManagement = createSlice({
@@ -17,13 +17,15 @@ const LocationManagement = createSlice({
       state.paginator = Math.ceil(action.payload.totalRow / 100);
     },
     getLocationBySearchApiAction: (state, action) => {
-      state.searchLocationByEmail = action.payload;
+      state.searchLocationByName = action.payload;
     },
   },
 });
 
-export const { getLocationListApiByPageIndexAction, getLocationBySearchApiAction } =
-LocationManagement.actions;
+export const {
+  getLocationListApiByPageIndexAction,
+  getLocationBySearchApiAction,
+} = LocationManagement.actions;
 
 export default LocationManagement.reducer;
 
@@ -37,9 +39,10 @@ export const getLocationListApiByPageIndex = (pageIndex) => {
           tokenCybersoft: TOKEN,
         },
       });
+      dispatch(getLocationBySearchApiAction([]));
       dispatch(getLocationListApiByPageIndexAction(result.data.content));
     } catch (error) {
-      console.log(error);
+      return error;
     }
   };
 };
@@ -51,15 +54,18 @@ export const getLocationBySearchApi = (search) => {
         url: "https://airbnbnew.cybersoft.edu.vn/api/vi-tri/phan-trang-tim-kiem?pageIndex=1&pageSize=384",
         method: "GET",
         headers: {
+          token: localStorage.getItem("user_id"),
           tokenCybersoft: TOKEN,
         },
       });
-      const findLocation = result.data.content.data.find((location) => {
-        if (location.tenPhong.toLowerCase().includes(search.trim().toLowerCase())) {
+      const findLocation = result.data.content.data.filter((location) => {
+        if (
+          location.tenViTri.toLowerCase().includes(search.trim().toLowerCase())
+        ) {
           return location;
         }
       });
-      dispatch(getLocationBySearchApiAction(findLocation ?? {}));
+      dispatch(getLocationBySearchApiAction(findLocation));
     } catch (error) {
       return error;
     }

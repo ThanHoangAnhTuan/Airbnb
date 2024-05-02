@@ -5,7 +5,7 @@ import { TOKEN } from "../../util/config";
 const initialState = {
   userListByPageIndex: [],
   paginator: 0,
-  searchUserByEmail: {},
+  searchUserByEmail: [],
 };
 
 const UserManagement = createSlice({
@@ -37,6 +37,7 @@ export const getUserListApiByPageIndex = (pageIndex) => {
           tokenCybersoft: TOKEN,
         },
       });
+      dispatch(getUserBySearchApiAction([]));
       dispatch(getUserListApiByPageIndexAction(result.data.content));
     } catch (error) {
       console.log(error);
@@ -54,12 +55,12 @@ export const getUserBySearchApi = (search) => {
           tokenCybersoft: TOKEN,
         },
       });
-      const findUser = result.data.content.data.find((user) => {
-        if (user.email === search) {
+      const findUser = result.data.content.data.filter((user) => {
+        if (user.name.toLowerCase().includes(search.toLowerCase())) {
           return user;
         }
       });
-      dispatch(getUserBySearchApiAction(findUser ?? {}));
+      dispatch(getUserBySearchApiAction(findUser));
     } catch (error) {
       return error;
     }
@@ -79,7 +80,7 @@ export const putUserByIdApi = (data) => {
       });
       return result;
     } catch (error) {
-      console.log(error);
+      return error;
     }
   };
 };

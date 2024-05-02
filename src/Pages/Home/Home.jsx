@@ -125,6 +125,11 @@ const Home = () => {
                         </NavLink>
                       </>
                     )}
+                    <NavLink
+                      to={`/management/user`}
+                      className={"px-5 py-3 hover:bg-gray-300"}>
+                      Quản lý
+                    </NavLink>
                   </div>
                 )}
               </div>

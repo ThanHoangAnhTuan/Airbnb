@@ -22,6 +22,7 @@ const UserManagement = () => {
   const { userListByPageIndex, paginator, searchUserByEmail } = useSelector(
     (state) => state.UserManagement
   );
+  const search = searchParams.get("keyword");
 
   const [userInfoUpdate, setUserInfoUpdate] = useState({
     avatar: "",
@@ -64,7 +65,7 @@ const UserManagement = () => {
   const handleOk = async () => {
     if (typeModal === "update") {
       const result = await dispatch(putUserByIdApi(userInfoUpdate, pageIndex));
-      if (result.data.statusCode === 200) {
+      if (result.data?.statusCode === 200) {
         toast.current.show({
           severity: "success",
           summary: "Success",
@@ -147,14 +148,13 @@ const UserManagement = () => {
   }
 
   useEffect(() => {
-    const search = searchParams.get("keyword");
+    console.log(search);
     if (search) {
       dispatch(getUserBySearchApi(search));
     } else {
-      dispatch(getUserBySearchApi(search));
       dispatch(getUserListApiByPageIndex(pageIndex));
     }
-  }, [dispatch, searchParams, pageIndex]);
+  }, [dispatch, search, pageIndex]);
 
   const renderPaginator = () => {
     let content = [];
@@ -195,6 +195,8 @@ const UserManagement = () => {
     keyWordRef.current = e.target.value;
   };
 
+  console.log(searchUserByEmail);
+  console.log(userListByPageIndex);
   return (
     <div className="p-5">
       <button
@@ -250,45 +252,46 @@ const UserManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {Object.keys(searchUserByEmail).length > 0 && (
-              <tr
-                key={searchUserByEmail.id}
-                className="border">
-                <td>{1}</td>
-                <td>{searchUserByEmail.id}</td>
-                <td>{searchUserByEmail.name}</td>
-                <td>
-                  {searchUserByEmail.avatar && (
-                    <img
-                      className="h-20 w-20 object-contain rounded-full"
-                      src={searchUserByEmail.avatar}
-                      alt="avatar"
-                    />
-                  )}
-                  {!searchUserByEmail.avatar && (
-                    <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
-                  )}
-                </td>
-                <td>{searchUserByEmail.birthday}</td>
-                <td>{searchUserByEmail.gender ? "Nam" : "Nữ"}</td>
-                <td>{searchUserByEmail.phone}</td>
-                <td>{searchUserByEmail.role}</td>
-                <td>
-                  <button
-                    type="button"
-                    className="bg-blue-500 text-white px-5 py-1 mr-3"
-                    onClick={() => showModal(searchUserByEmail, "update")}>
-                    Sửa
-                  </button>
-                  <button
-                    className="bg-red-500 text-white px-5 py-1"
-                    onClick={() => handleRemoveUser(searchUserByEmail)}>
-                    Xoá
-                  </button>
-                </td>
-              </tr>
-            )}
-            {Object.keys(searchUserByEmail).length === 0 &&
+            {searchUserByEmail.length > 0 &&
+              searchUserByEmail.map((user, index) => (
+                <tr
+                  key={user.id}
+                  className="border">
+                  <td>{index + 1}</td>
+                  <td>{user.id}</td>
+                  <td>{user.name}</td>
+                  <td>
+                    {user.avatar && (
+                      <img
+                        className="h-20 w-20 object-contain rounded-full"
+                        src={user.avatar}
+                        alt="avatar"
+                      />
+                    )}
+                    {!user.avatar && (
+                      <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
+                    )}
+                  </td>
+                  <td>{user.birthday}</td>
+                  <td>{user.gender ? "Nam" : "Nữ"}</td>
+                  <td>{user.phone}</td>
+                  <td>{user.role}</td>
+                  <td>
+                    <button
+                      type="button"
+                      className="bg-blue-500 text-white px-5 py-1 mr-3"
+                      onClick={() => showModal(user, "update")}>
+                      Sửa
+                    </button>
+                    <button
+                      className="bg-red-500 text-white px-5 py-1"
+                      onClick={() => handleRemoveUser(user)}>
+                      Xoá
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            {(!search || searchUserByEmail.length === 0) &&
               userListByPageIndex.map((user, index) => {
                 return (
                   <tr
@@ -439,12 +442,11 @@ const UserManagement = () => {
         </Modal>
         <Toast ref={toast} />
       </div>
-      {Object.keys(searchUserByEmail).length === 0 &&
-        userListByPageIndex.length > 0 && (
-          <div>
-            <ul className="flex justify-center">{renderPaginator()}</ul>
-          </div>
-        )}
+      {searchUserByEmail.length === 0 && userListByPageIndex.length > 0 && (
+        <div>
+          <ul className="flex justify-center">{renderPaginator()}</ul>
+        </div>
+      )}
     </div>
   );
 };

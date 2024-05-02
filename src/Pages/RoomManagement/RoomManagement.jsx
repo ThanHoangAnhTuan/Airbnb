@@ -18,29 +18,31 @@ const RoomManagement = () => {
   const [pageIndex, setPageIndex] = useState(1);
   let [searchParams, setSearchParams] = useSearchParams();
   const keyWordRef = useRef("");
-  const { roomListByPageIndex, paginator, searchRoomByEmail } = useSelector(
+  const { roomListByPageIndex, paginator, searchRoomByName } = useSelector(
     (state) => state.RoomManagement
   );
+  const search = searchParams.get("keyword");
+
   const [roomInfoUpdate, setRoomInfoUpdate] = useState({
-    banLa: true,
-    banUi: true,
-    bep: true,
-    dieuHoa: true,
-    doXe: true,
-    giaTien: 0,
-    giuong: 0,
-    hinhAnh: "",
-    hoBoi: true,
     id: 0,
-    khach: 0,
-    maViTri: 0,
-    mayGiat: true,
-    moTa: "",
-    phongNgu: 0,
-    phongTam: 0,
     tenPhong: "",
-    tivi: true,
-    wifi: true,
+    khach: 0,
+    phongNgu: 0,
+    giuong: 0,
+    phongTam: 0,
+    moTa: "",
+    giaTien: 0,
+    mayGiat: false,
+    banLa: false,
+    tivi: false,
+    dieuHoa: false,
+    wifi: false,
+    bep: false,
+    doXe: false,
+    hoBoi: false,
+    banUi: false,
+    maViTri: 0,
+    hinhAnh: "",
   });
   const [open, setOpen] = useState(false);
   const toast = useRef(null);
@@ -48,48 +50,48 @@ const RoomManagement = () => {
 
   const showModal = (
     {
-      banLa,
-      banUi,
-      bep,
-      dieuHoa,
-      doXe,
-      giaTien,
-      giuong,
-      hinhAnh,
-      hoBoi,
       id,
-      khach,
-      maViTri,
-      mayGiat,
-      moTa,
-      phongNgu,
-      phongTam,
       tenPhong,
+      khach,
+      phongNgu,
+      giuong,
+      phongTam,
+      moTa,
+      giaTien,
+      mayGiat,
+      banLa,
       tivi,
+      dieuHoa,
       wifi,
+      bep,
+      doXe,
+      hoBoi,
+      banUi,
+      maViTri,
+      hinhAnh,
     },
     type
   ) => {
     setRoomInfoUpdate({
-      banLa,
-      banUi,
-      bep,
-      dieuHoa,
-      doXe,
-      giaTien,
-      giuong,
-      hinhAnh,
-      hoBoi,
       id,
-      khach,
-      maViTri,
-      mayGiat,
-      moTa,
-      phongNgu,
-      phongTam,
       tenPhong,
+      khach,
+      phongNgu,
+      giuong,
+      phongTam,
+      moTa,
+      giaTien,
+      mayGiat,
+      banLa,
       tivi,
+      dieuHoa,
       wifi,
+      bep,
+      doXe,
+      hoBoi,
+      banUi,
+      maViTri,
+      hinhAnh,
     });
     setTypeModal(type);
     setOpen(true);
@@ -127,7 +129,7 @@ const RoomManagement = () => {
       const result = await dispatch(
         createRoomByIdApi(roomInfoUpdate, pageIndex)
       );
-      if (result.response.data.statusCode === 403) {
+      if (result.response?.status === 400) {
         toast.current.show({
           severity: "error",
           summary: "Error",
@@ -138,7 +140,7 @@ const RoomManagement = () => {
         toast.current.show({
           severity: "success",
           summary: "Success",
-          detail: "Thêm phòng thành công",
+          detail: "Thêm thành công",
         });
         setOpen(false);
       }
@@ -170,11 +172,10 @@ const RoomManagement = () => {
   };
 
   function handleChange(e) {
-    if (e.target.name === "gender") {
-      const setGender = e.target.value === "nam" ? true : false;
+    if (e.target.type === "checkbox") {
       setRoomInfoUpdate({
         ...roomInfoUpdate,
-        [e.target.name]: setGender,
+        [e.target.name]: e.target.checked,
       });
     } else {
       setRoomInfoUpdate({
@@ -185,14 +186,12 @@ const RoomManagement = () => {
   }
 
   useEffect(() => {
-    const search = searchParams.get("keyword");
     if (search) {
       dispatch(getRoomBySearchApi(search));
     } else {
-      dispatch(getRoomBySearchApi(search));
       dispatch(getRoomListApiByPageIndex(pageIndex));
     }
-  }, [dispatch, searchParams, pageIndex]);
+  }, [dispatch, search, pageIndex]);
 
   const renderPaginator = () => {
     let content = [];
@@ -240,25 +239,25 @@ const RoomManagement = () => {
         onClick={() =>
           showModal(
             {
-              banLa: true,
-              banUi: true,
-              bep: true,
-              dieuHoa: true,
-              doXe: true,
-              giaTien: 0,
-              giuong: 0,
-              hinhAnh: "",
-              hoBoi: true,
               id: 0,
-              khach: 0,
-              maViTri: 0,
-              mayGiat: true,
-              moTa: "",
-              phongNgu: 0,
-              phongTam: 0,
               tenPhong: "",
-              tivi: true,
-              wifi: true,
+              khach: 0,
+              phongNgu: 0,
+              giuong: 0,
+              phongTam: 0,
+              moTa: "",
+              giaTien: 0,
+              mayGiat: false,
+              banLa: false,
+              tivi: false,
+              dieuHoa: false,
+              wifi: false,
+              bep: false,
+              doXe: false,
+              hoBoi: false,
+              banUi: false,
+              maViTri: 0,
+              hinhAnh: "",
             },
             "create"
           )
@@ -288,58 +287,57 @@ const RoomManagement = () => {
             <tr className="border">
               <th className="text-start">STT</th>
               <th className="text-start">Id</th>
-              <th className="text-start">Name</th>
-              <th className="text-start">Image</th>
-              <th className="text-start">Description</th>
-              <th className="text-start">Price</th>
+              <th className="text-start">Tên phòng</th>
+              <th className="text-start">Hình ảnh</th>
+              <th className="text-start">Mô tả</th>
+              <th className="text-start">Giá tiền</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {Object.keys(searchRoomByEmail).length > 0 && (
-              <tr
-                key={searchRoomByEmail.id}
-                className="border">
-                <td>{1}</td>
-                <td>{searchRoomByEmail.id}</td>
-                <td>{searchRoomByEmail.tenPhong}</td>
-                <td>
-                  {searchRoomByEmail.hinhAnh && (
-                    <img
-                      className="h-20 w-20 object-cover"
-                      src={searchRoomByEmail.hinhAnh}
-                      alt="hinh anh"
-                    />
-                  )}
-                  {!searchRoomByEmail.hinhAnh && (
-                    <div className="h-20 w-20 object-cover bg-gray-300"></div>
-                  )}
-                </td>
-                <td>
-                  {searchRoomByEmail.moTa.length > 50
-                    ? searchRoomByEmail.moTa.slice(0, 50) + "..."
-                    : searchRoomByEmail.moTa}
-                </td>
-                <td className="font-medium">
-                  ${searchRoomByEmail.giaTien}/Tháng
-                </td>
-                <td className="flex">
-                  <button
-                    type="button"
-                    className="bg-blue-500 text-white px-5 py-1 mr-3"
-                    onClick={() => showModal(searchRoomByEmail, "update")}>
-                    Sửa
-                  </button>
-                  <button
-                    className="bg-red-500 text-white px-5 py-1"
-                    onClick={() => handleRemoveRoom(searchRoomByEmail)}>
-                    Xoá
-                  </button>
-                </td>
-              </tr>
-            )}
-            {Object.keys(searchRoomByEmail).length === 0 &&
-              [...roomListByPageIndex].reverse().map((room, index) => {
+            {searchRoomByName.length > 0 &&
+              searchRoomByName.map((room, index) => (
+                <tr
+                  key={room.id}
+                  className="border">
+                  <td>{index + 1}</td>
+                  <td>{room.id}</td>
+                  <td>{room.tenPhong}</td>
+                  <td>
+                    {room.hinhAnh && (
+                      <img
+                        className="h-20 w-20 object-contain rounded-full"
+                        src={room.hinhAnh}
+                        alt="hinhAnh"
+                      />
+                    )}
+                    {!room.hinhAnh && (
+                      <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
+                    )}
+                  </td>
+                  <td>
+                    {room.moTa.length > 50
+                      ? room.moTa.slice(0, 50) + "..."
+                      : room.moTa}
+                  </td>
+                  <td>${room.giaTien}/ Tháng</td>
+                  <td>
+                    <button
+                      type="button"
+                      className="bg-blue-500 text-white px-5 py-1 mr-3"
+                      onClick={() => showModal(room, "update")}>
+                      Sửa
+                    </button>
+                    <button
+                      className="bg-red-500 text-white px-5 py-1"
+                      onClick={() => handleRemoveRoom(room)}>
+                      Xoá
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            {(!search || searchRoomByName.length === 0) &&
+              roomListByPageIndex.map((room, index) => {
                 return (
                   <tr
                     key={room.id}
@@ -350,13 +348,13 @@ const RoomManagement = () => {
                     <td>
                       {room.hinhAnh && (
                         <img
-                          className="h-20 w-20 object-cover"
+                          className="h-20 w-20 object-contain rounded-full"
                           src={room.hinhAnh}
-                          alt="hinh anh"
+                          alt="hinhAnh"
                         />
                       )}
                       {!room.hinhAnh && (
-                        <div className="h-20 w-20 object-cover bg-gray-300"></div>
+                        <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
                       )}
                     </td>
                     <td>
@@ -364,8 +362,8 @@ const RoomManagement = () => {
                         ? room.moTa.slice(0, 50) + "..."
                         : room.moTa}
                     </td>
-                    <td className="font-medium">${room.giaTien}/Tháng</td>
-                    <td className="flex">
+                    <td>${room.giaTien}/ Tháng</td>
+                    <td>
                       <button
                         className="bg-blue-500 text-white px-5 py-1 mr-3"
                         onClick={() => showModal(room, "update")}>
@@ -419,7 +417,7 @@ const RoomManagement = () => {
               onChange={(e) => handleChange(e)}
             />
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-5">
             <div className="w-full flex flex-col">
               <label htmlFor="maViTri">Mã vị trí</label>
               <input
@@ -443,8 +441,8 @@ const RoomManagement = () => {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3 mt-3">
-            <div className="flex flex-col w-full">
+          <div className="grid grid-cols-2 gap-5 mt-3">
+            <div className="w-full flex flex-col">
               <label htmlFor="khach">Khách</label>
               <input
                 value={roomInfoUpdate.khach}
@@ -455,7 +453,7 @@ const RoomManagement = () => {
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            <div className="flex flex-col w-full">
+            <div className="w-full flex flex-col">
               <label htmlFor="giuong">Giường</label>
               <input
                 value={roomInfoUpdate.giuong}
@@ -467,8 +465,8 @@ const RoomManagement = () => {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3 mt-3">
-            <div className="flex flex-col w-full">
+          <div className="grid grid-cols-2 gap-5 mt-3">
+            <div className="w-full flex flex-col">
               <label htmlFor="phongNgu">Phòng ngủ</label>
               <input
                 value={roomInfoUpdate.phongNgu}
@@ -479,7 +477,7 @@ const RoomManagement = () => {
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            <div className="flex flex-col w-full">
+            <div className="w-full flex flex-col">
               <label htmlFor="phongTam">Phòng tắm</label>
               <input
                 value={roomInfoUpdate.phongTam}
@@ -492,55 +490,61 @@ const RoomManagement = () => {
             </div>
           </div>
           <div className="grid grid-cols-3 gap-5 mt-3">
-            <div className="flex items-center">
+            <div className="w-full flex flex-row">
               <label
                 htmlFor="mayGiat"
-                className="flex-auto">
+                className="flex-1">
                 Máy giặt
               </label>
               <input
-                checked={roomInfoUpdate.mayGiat}
-                id="mayGiat"
                 value={roomInfoUpdate.mayGiat}
+                checked={roomInfoUpdate.mayGiat}
                 name="mayGiat"
+                id="mayGiat"
                 type="checkbox"
+                min={0}
+                className="border outline-none p-3"
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            <div className="flex items-center">
+            <div className="w-full flex flex-row">
               <label
                 htmlFor="banLa"
-                className="flex-auto">
+                className="flex-1">
                 Bàn là
               </label>
               <input
-                id="banLa"
                 value={roomInfoUpdate.banLa}
                 checked={roomInfoUpdate.banLa}
                 name="banLa"
+                id="banLa"
                 type="checkbox"
+                min={0}
+                className="border outline-none p-3"
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            <div className="flex items-center">
+            <div className="w-full flex flex-row">
               <label
                 htmlFor="tivi"
-                className="flex-auto">
+                className="flex-1">
                 Tivi
               </label>
               <input
-                id="tivi"
                 value={roomInfoUpdate.tivi}
                 checked={roomInfoUpdate.tivi}
                 name="tivi"
+                id="tivi"
                 type="checkbox"
+                min={0}
+                className="border outline-none p-3"
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            <div className="flex items-center">
+            <div className="w-full flex flex-row">
               <label
                 htmlFor="dieuHoa"
-                className="flex-auto">
+                className="flex-1">
                 Điều hoà
               </label>
               <input
@@ -549,13 +553,15 @@ const RoomManagement = () => {
                 name="dieuHoa"
                 id="dieuHoa"
                 type="checkbox"
+                min={0}
+                className="border outline-none p-3"
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            <div className="flex items-center">
+            <div className="w-full flex flex-row">
               <label
                 htmlFor="wifi"
-                className="flex-auto">
+                className="flex-1">
                 Wifi
               </label>
               <input
@@ -564,13 +570,15 @@ const RoomManagement = () => {
                 name="wifi"
                 id="wifi"
                 type="checkbox"
+                min={0}
+                className="border outline-none p-3"
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            <div className="flex items-center">
+            <div className="w-full flex flex-row">
               <label
                 htmlFor="bep"
-                className="flex-auto">
+                className="flex-1">
                 Bếp
               </label>
               <input
@@ -579,13 +587,15 @@ const RoomManagement = () => {
                 name="bep"
                 id="bep"
                 type="checkbox"
+                min={0}
+                className="border outline-none p-3"
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            <div className="flex items-center">
+            <div className="w-full flex flex-row">
               <label
                 htmlFor="doXe"
-                className="flex-auto">
+                className="flex-1">
                 Đỗ xe
               </label>
               <input
@@ -594,13 +604,15 @@ const RoomManagement = () => {
                 name="doXe"
                 id="doXe"
                 type="checkbox"
+                min={0}
+                className="border outline-none p-3"
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            <div className="flex items-center">
+            <div className="w-full flex flex-row">
               <label
                 htmlFor="hoBoi"
-                className="flex-auto">
+                className="flex-1">
                 Hồ bơi
               </label>
               <input
@@ -609,13 +621,15 @@ const RoomManagement = () => {
                 name="hoBoi"
                 id="hoBoi"
                 type="checkbox"
+                min={0}
+                className="border outline-none p-3"
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            <div className="flex items-center">
+            <div className="w-full flex flex-row">
               <label
                 htmlFor="banUi"
-                className="flex-auto">
+                className="flex-1">
                 Bàn ủi
               </label>
               <input
@@ -624,6 +638,8 @@ const RoomManagement = () => {
                 name="banUi"
                 id="banUi"
                 type="checkbox"
+                min={0}
+                className="border outline-none p-3"
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -631,12 +647,11 @@ const RoomManagement = () => {
         </Modal>
         <Toast ref={toast} />
       </div>
-      {Object.keys(searchRoomByEmail).length === 0 &&
-        roomListByPageIndex.length > 0 && (
-          <div>
-            <ul className="flex justify-center">{renderPaginator()}</ul>
-          </div>
-        )}
+      {searchRoomByName.length === 0 && roomListByPageIndex.length > 0 && (
+        <div>
+          <ul className="flex justify-center">{renderPaginator()}</ul>
+        </div>
+      )}
     </div>
   );
 };

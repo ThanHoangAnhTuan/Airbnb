@@ -5,7 +5,7 @@ import { TOKEN } from "../../util/config";
 const initialState = {
   roomListByPageIndex: [],
   paginator: 0,
-  searchRoomByEmail: {},
+  searchRoomByName: [],
 };
 
 const RoomManagement = createSlice({
@@ -17,7 +17,7 @@ const RoomManagement = createSlice({
       state.paginator = Math.ceil(action.payload.totalRow / 100);
     },
     getRoomBySearchApiAction: (state, action) => {
-      state.searchRoomByEmail = action.payload;
+      state.searchRoomByName = action.payload;
     },
   },
 });
@@ -34,12 +34,14 @@ export const getRoomListApiByPageIndex = (pageIndex) => {
         url: `https://airbnbnew.cybersoft.edu.vn/api/phong-thue/phan-trang-tim-kiem?pageIndex=${pageIndex}&pageSize=100`,
         method: "GET",
         headers: {
+          token: localStorage.getItem("user_id"),
           tokenCybersoft: TOKEN,
         },
       });
+      dispatch(getRoomBySearchApiAction([]));
       dispatch(getRoomListApiByPageIndexAction(result.data.content));
     } catch (error) {
-      console.log(error);
+      return error;
     }
   };
 };
@@ -51,15 +53,16 @@ export const getRoomBySearchApi = (search) => {
         url: "https://airbnbnew.cybersoft.edu.vn/api/phong-thue/phan-trang-tim-kiem?pageIndex=1&pageSize=384",
         method: "GET",
         headers: {
+          token: localStorage.getItem("user_id"),
           tokenCybersoft: TOKEN,
         },
       });
-      const findRoom = result.data.content.data.find((room) => {
-        if (room.tenPhong.toLowerCase().includes(search.trim().toLowerCase())) {
+      const findRoom = result.data.content.data.filter((room) => {
+        if (room.tenPhong.toLowerCase().includes(search.toLowerCase())) {
           return room;
         }
       });
-      dispatch(getRoomBySearchApiAction(findRoom ?? {}));
+      dispatch(getRoomBySearchApiAction(findRoom));
     } catch (error) {
       return error;
     }
