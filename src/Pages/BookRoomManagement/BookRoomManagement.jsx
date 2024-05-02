@@ -304,7 +304,7 @@ const BookRoomManagement = () => {
               value={bookRoomInfoUpdate.maPhong}
               name="maPhong"
               type="text"
-              className="ml-5 border outline-none w-[380px] p-3"
+              className="ml-5 border outline-none w-[350px] p-3"
               onChange={(e) => handleChange(e)}
             />
           </div>
@@ -313,7 +313,7 @@ const BookRoomManagement = () => {
             <Calendar
               value={new Date(bookRoomInfoUpdate.ngayDen)}
               name="ngayDen"
-              className="w-[380px]"
+              className="w-[350px]"
               onChange={(e) => handleChange(e)}
               dateFormat="dd/mm/yy"
             />
@@ -323,7 +323,7 @@ const BookRoomManagement = () => {
             <Calendar
               value={new Date(bookRoomInfoUpdate.ngayDi)}
               name="ngayDi"
-              className="w-[380px]"
+              className="w-[350px]"
               onChange={(e) => handleChange(e)}
               dateFormat="dd/mm/yy"
             />
@@ -334,7 +334,7 @@ const BookRoomManagement = () => {
               value={bookRoomInfoUpdate.soLuongKhach}
               name="soLuongKhach"
               type="text"
-              className="ml-5 border outline-none w-[380px] p-3"
+              className="ml-5 border outline-none w-[350px] p-3"
               onChange={(e) => handleChange(e)}
             />
           </div>
@@ -344,7 +344,7 @@ const BookRoomManagement = () => {
               value={bookRoomInfoUpdate.maNguoiDung}
               name="maNguoiDung"
               type="text"
-              className="ml-5 border outline-none w-[380px] p-3"
+              className="ml-5 border outline-none w-[350px] p-3"
               onChange={(e) => handleChange(e)}
             />
           </div>
