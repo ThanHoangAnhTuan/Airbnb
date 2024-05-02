@@ -132,11 +132,11 @@ const SignIn = () => {
           <Input.Password />
         </Form.Item>
         <Form.Item>
-          <a
+          <NavLink
             className="ml-24"
             href="/register">
             Bạn chưa có tài khoản? Đăng ký ngay!
-          </a>
+          </NavLink>
         </Form.Item>
 
         <Form.Item
