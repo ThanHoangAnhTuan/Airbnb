@@ -82,48 +82,56 @@ const RoomDetail = () => {
   const handleSubmitSendComment = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("user_id");
-    const decoded = JSON.parse(atob(token.split(".")[1]));
-    await dispatch(
-      postCommentByRoomIdApi({
-        maPhong: params.id,
-        maNguoiBinhLuan: decoded.id,
-        noiDung: comment,
-        ngayBinhLuan: new Date(),
-        saoBinhLuan: 4,
-      })
-    );
-    await dispatch(getCommentListByRoomIdApi(params.id));
-    setComment("");
+    if (token) {
+      const decoded = JSON.parse(atob(token.split(".")[1]));
+      await dispatch(
+        postCommentByRoomIdApi({
+          maPhong: params.id,
+          maNguoiBinhLuan: decoded.id,
+          noiDung: comment,
+          ngayBinhLuan: new Date(),
+          saoBinhLuan: 4,
+        })
+      );
+      await dispatch(getCommentListByRoomIdApi(params.id));
+      setComment("");
+    } else {
+      navigate("/signin");
+    }
   };
 
   const handleSubmitBookRoom = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("user_id");
-    const decoded = JSON.parse(atob(token.split(".")[1]));
-    const result = await dispatch(
-      postBookRoomApi({
-        maPhong: params.id,
-        ngayDen: minDate,
-        ngayDi: maxDate,
-        soLuongKhach: customerCount,
-        maNguoiDung: decoded.id,
-      })
-    );
-    if (
-      result?.data.statusCode === 201 &&
-      result?.data.message === "Thêm mới thành công!"
-    ) {
-      bookRoomRef.current.show({
-        severity: "success",
-        summary: "Success",
-        detail: "Booked room successfully",
-      });
+    if (token) {
+      const decoded = JSON.parse(atob(token.split(".")[1]));
+      const result = await dispatch(
+        postBookRoomApi({
+          maPhong: params.id,
+          ngayDen: minDate,
+          ngayDi: maxDate,
+          soLuongKhach: customerCount,
+          maNguoiDung: decoded.id,
+        })
+      );
+      if (
+        result?.data.statusCode === 201 &&
+        result?.data.message === "Thêm mới thành công!"
+      ) {
+        bookRoomRef.current.show({
+          severity: "success",
+          summary: "Success",
+          detail: "Booked room successfully",
+        });
+      } else {
+        bookRoomRef.current.show({
+          severity: "error",
+          summary: "Error",
+          detail: "Booked room unsuccessfully",
+        });
+      }
     } else {
-      bookRoomRef.current.show({
-        severity: "error",
-        summary: "Error",
-        detail: "Booked room unsuccessfully",
-      });
+      navigate("/signin");
     }
   };
 

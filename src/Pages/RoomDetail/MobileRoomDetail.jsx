@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import {
   getCommentListByRoomIdApi,
   getPositionByIdApi,
@@ -59,6 +59,13 @@ const MobileRoomDetail = () => {
   const [comment, setComment] = useState("");
   const commentRef = useRef(null);
   const bookRoomRef = useRef(null);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("user_id");
+  const isLogin = token ? true : false;
+  let decoded;
+  if (token) {
+    decoded = JSON.parse(atob(token.split(".")[1]));
+  }
 
   useEffect(() => {
     dispatch(getRoomDetailByIdApi(params.id));
@@ -73,50 +80,57 @@ const MobileRoomDetail = () => {
 
   const handleSubmitSendComment = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("accesstoken");
-    const decoded = JSON.parse(atob(token.split(".")[1]));
-    await dispatch(
-      postCommentByRoomIdApi({
-        maPhong: params.id,
-        maNguoiBinhLuan: decoded.id,
-        noiDung: comment,
-        ngayBinhLuan: new Date(),
-        saoBinhLuan: 4,
-      })
-    );
-    await dispatch(getCommentListByRoomIdApi(params.id));
-    setComment("");
+    const token = localStorage.getItem("user_id");
+    if (token) {
+      const decoded = JSON.parse(atob(token.split(".")[1]));
+      await dispatch(
+        postCommentByRoomIdApi({
+          maPhong: params.id,
+          maNguoiBinhLuan: decoded.id,
+          noiDung: comment,
+          ngayBinhLuan: new Date(),
+          saoBinhLuan: 4,
+        })
+      );
+      await dispatch(getCommentListByRoomIdApi(params.id));
+      setComment("");
+    } else {
+      navigate("/signin");
+    }
   };
 
   const handleSubmitBookRoom = async (e) => {
-    console.log("handleSubmitBookRoom");
     e.preventDefault();
-    const token = localStorage.getItem("accesstoken");
-    const decoded = JSON.parse(atob(token.split(".")[1]));
-    const result = await dispatch(
-      postBookRoomApi({
-        maPhong: params.id,
-        ngayDen: minDate,
-        ngayDi: maxDate,
-        soLuongKhach: customerCount,
-        maNguoiDung: decoded.id,
-      })
-    );
-    if (
-      result?.data.statusCode === 201 &&
-      result?.data.message === "Thêm mới thành công!"
-    ) {
-      bookRoomRef.current.show({
-        severity: "success",
-        summary: "Success",
-        detail: "Booked room successfully",
-      });
+    const token = localStorage.getItem("user_id");
+    if (token) {
+      const decoded = JSON.parse(atob(token.split(".")[1]));
+      const result = await dispatch(
+        postBookRoomApi({
+          maPhong: params.id,
+          ngayDen: minDate,
+          ngayDi: maxDate,
+          soLuongKhach: customerCount,
+          maNguoiDung: decoded.id,
+        })
+      );
+      if (
+        result?.data.statusCode === 201 &&
+        result?.data.message === "Thêm mới thành công!"
+      ) {
+        bookRoomRef.current.show({
+          severity: "success",
+          summary: "Success",
+          detail: "Booked room successfully",
+        });
+      } else {
+        bookRoomRef.current.show({
+          severity: "error",
+          summary: "Error",
+          detail: "Booked room unsuccessfully",
+        });
+      }
     } else {
-      bookRoomRef.current.show({
-        severity: "error",
-        summary: "Error",
-        detail: "Booked room unsuccessfully",
-      });
+      navigate("/signin");
     }
   };
 
@@ -137,7 +151,67 @@ const MobileRoomDetail = () => {
 
   return (
     <PrimeReactProvider>
-      <div className="px-2">
+      <header>
+        <nav className="flex items-center justify-between pt-5 px-10 pb-10">
+          <div className="flex">
+            <NavLink
+              to="/"
+              className="text-4xl text-pink-500">
+              <i className="fa-brands fa-airbnb"></i>
+              <span> airbnb</span>
+            </NavLink>
+          </div>
+          <div className="flex items-center justify-between text-black">
+            <NavLink className="text-lg">Đón tiếp khách</NavLink>
+            <NavLink className="mx-5">
+              {" "}
+              <i className="fa-solid fa-globe"></i>
+            </NavLink>
+            <div
+              className="relative cursor-pointer flex items-center justify-around w-20 h-12 bg-gray-300 rounded-xl"
+              onClick={() => setIsOpen(!isOpen)}>
+              {!isLogin && <i className="fa-solid fa-bars"></i>}
+              <i className="fa-solid fa-user"></i>
+              {isOpen && (
+                <div className="flex transition-all flex-col w-40 absolute right-0 top-full bg-white text-black shadow-[0_5px_15px_rgba(0,0,0,0.3)]">
+                  {!isLogin && (
+                    <>
+                      <NavLink
+                        to="/register"
+                        className={"px-5 py-3 hover:bg-gray-300"}>
+                        Đăng ký
+                      </NavLink>
+                      <NavLink
+                        to="/signin"
+                        className={"px-5 py-3 hover:bg-gray-300"}>
+                        Đăng nhập
+                      </NavLink>
+                    </>
+                  )}
+                  {isLogin && (
+                    <>
+                      <button
+                        className="px-5 py-3 hover:bg-gray-300 text-left"
+                        onClick={() => {
+                          localStorage.removeItem("user_id");
+                          navigate("/");
+                        }}>
+                        Đăng xuất
+                      </button>
+                      <NavLink
+                        to={`/userinfo/${decoded.id}`}
+                        className={"px-5 py-3 hover:bg-gray-300"}>
+                        Tài khoản
+                      </NavLink>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </nav>
+      </header>
+      <div className="px-5">
         <div className="flex flex-wrap justify-between py-6 items-center">
           <div className="text-[#222] text-2xl font-bold">{tenPhong}</div>
           <div className="flex items-center">

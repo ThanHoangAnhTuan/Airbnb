@@ -76,11 +76,7 @@ const MobileRoomList = () => {
               
             </NavLink>
           </div>
-          <div className="flex items-center text-black ">
-            <NavLink className="mx-5 text-base">Nơi ở</NavLink>
-            <NavLink className="mx-5 text-base">Trải nghiệm</NavLink>
-            <NavLink className="mx-5 text-base">Trải nghiệm trực tuyến</NavLink>
-          </div>
+          
           <div className="flex items-center justify-between text-black">
             <NavLink className="text-base">Đón tiếp khách</NavLink>
             <NavLink className="mx-5">
@@ -181,8 +177,8 @@ const MobileRoomList = () => {
           })}
         </div>
       </div>
-      <div className="px-20 mt-10 bg-slate-100">
-        <div className="p-5 grid grid-cols-2 gap-2">
+      <div className="px-3 mt-10 bg-slate-100">
+        <div className="grid grid-cols-2 gap-2">
           <div className="">
             <h2 className="font-semibold uppercase text-sm">Giới thiệu</h2>
             <div className="flex-col text-xs">

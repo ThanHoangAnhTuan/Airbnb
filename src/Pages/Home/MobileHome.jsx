@@ -76,19 +76,9 @@ const MobileHome = () => {
                 {/* <span> airbnb</span> */}
               </NavLink>
             </div>
-            <div className="flex items-center text-white ">
-              <NavLink className="mx-5 text-xs">Nơi ở</NavLink>
-              <NavLink className="mx-5 text-xs">Trải nghiệm</NavLink>
-              <NavLink className="mx-5 text-xs">Trải nghiệm trực tuyến</NavLink>
-            </div>
             <div className="flex items-center justify-between text-white">
-              <NavLink className="text-xs">Đón tiếp khách</NavLink>
-              <NavLink className="mx-5">
-                {" "}
-                <i className="fa-solid fa-globe"></i>
-              </NavLink>
               <div
-                className="relative cursor-pointer flex items-center justify-around w-20 h-10 bg-gray-400 rounded-xl"
+                className="relative cursor-pointer flex items-center justify-around w-20 h-10 bg-gray-400 rounded-xl z-20"
                 onClick={() => setIsOpen(!isOpen)}>
                 {!isLogin && <i className="fa-solid fa-bars"></i>}
                 <i className="fa-solid fa-user"></i>
@@ -111,7 +101,7 @@ const MobileHome = () => {
                     {isLogin && (
                       <>
                         <button
-                          className="px-5 py-3 hover:bg-gray-300 text-left"
+                          className="px-5 py-3 hover:bg-gray-300 text-left z-10"
                           onClick={() => {
                             localStorage.removeItem("user_id");
                             navigate("/");
@@ -133,12 +123,12 @@ const MobileHome = () => {
         </header>
         <form
           onSubmit={(e) => handleSubmit(e)}
-          className="flex place-content-center absolute left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="bg-white w-40 h-16 pl-4 pt-1 rounded-l-3xl">
+          className="flex place-content-center absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+          <div className="bg-white w-80 h-14 pl-4 rounded-l-3xl py-1">
             <span>Địa điểm: </span>
             <br />
             <input
-              className="focus:outline-none w-32"
+              className="focus:outline-none w-full"
               type="text"
               placeholder="Bạn sắp đi đâu?"
               onChange={handleInputChange}
@@ -162,34 +152,7 @@ const MobileHome = () => {
               </div>
             )}
           </div>
-          <div className="bg-white w-40 h-16 pl-4 pt-1">
-            <span>Nhận phòng: </span>
-            <br />
-            <input
-              className="focus:outline-none w-32"
-              type="tetxt"
-              placeholder="Thêm ngày"
-            />
-          </div>
-          <div className="bg-white w-40 h-16 pl-4 pt-1">
-            <span>Trả phòng: </span>
-            <br />
-            <input
-              className="focus:outline-none w-32"
-              type="text"
-              placeholder="Thêm ngày"
-            />
-          </div>
-          <div className="bg-white w-40 h-16 pl-4 pt-1">
-            <span>Khách: </span>
-            <br />
-            <input
-              className="focus:outline-none w-32 "
-              type="text"
-              placeholder="Thêm khách"
-            />
-          </div>
-          <div className="bg-white pr-4 rounded-r-3xl pt-2">
+          <div className="bg-white pr-3 rounded-r-3xl pt-2">
             <button type="submit">
               <i className="fa fa-search icon_search w-10 h-10 bg-[#ff385c] p-3 rounded-3xl text-white"></i>
             </button>
@@ -197,13 +160,13 @@ const MobileHome = () => {
         </form>
         <img
           className="w-full h-[80%]"
-          src="./src/img/daLat.jpg"
+          src="./img/daLat.jpg"
           alt=""
         />
       </div>
       <div className="px-10 mt-10">
         <h4 className="text-lg mb-5">Khám phá những điểm đến gần đây</h4>
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           {nearbyLocation.map((location, index) => (
             <div
               className="inline-flex"
@@ -230,7 +193,7 @@ const MobileHome = () => {
               key={index}>
               <img
                 className="w-full h-80 rounded-xl border"
-                src={`./src/img/p${index + 1}.jpg`}
+                src={`./img/p${index + 1}.jpg`}
                 alt=""
               />
               <p className="font-semibold mt-3 text-center">Toàn bộ nhà</p>

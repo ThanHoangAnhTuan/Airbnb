@@ -1,16 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Modal } from "antd";
+import { Toast } from "primereact/toast";
 import {
   createRoomByIdApi,
   getRoomBySearchApi,
   getRoomListApiByPageIndex,
   putRoomByIdApi,
   removeRoomByIdApi,
-} from '../../Redux/RoomManagement/RoomManagement'
-
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { Modal } from "antd";
-import { Toast } from "primereact/toast";
+} from "../../Redux/RoomManagement/RoomManagement";
 
 const RoomManagement = () => {
   const dispatch = useDispatch();

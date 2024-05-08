@@ -3,8 +3,8 @@ import RoomDetail from "./RoomDetail/RoomDetail";
 import UserInfo from "./UserInfo/UserInfo";
 import UserManagement from "./UserManagement/UserManagement";
 import LocationManagement from "./LocationManagement/LocationManagement";
-import RoomManagement from "./RoomManagement/RoomManagement";
 import BookRoomManagement from "./BookRoomManagement/BookRoomManagement";
+import RoomManagement from './RoomManagement/RoomManagement'
 
 export const store = configureStore({
   reducer: {

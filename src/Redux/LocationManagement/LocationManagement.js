@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { TOKEN } from "../../util/config";
+import { TOKEN } from "../../util/config.js";
 
 const initialState = {
   locationListByPageIndex: [],

@@ -88,7 +88,7 @@ const Home = () => {
                 <i className="fa-solid fa-globe"></i>
               </NavLink>
               <div
-                className="relative cursor-pointer flex items-center justify-around w-20 h-12 bg-gray-400 rounded-xl"
+                className="relative cursor-pointer flex items-center justify-around w-20 h-12 bg-gray-400 rounded-xl z-20"
                 onClick={() => setIsOpen(!isOpen)}>
                 {!isLogin && <i className="fa-solid fa-bars"></i>}
                 <i className="fa-solid fa-user"></i>
@@ -138,7 +138,7 @@ const Home = () => {
         </header>
         <form
           onSubmit={(e) => handleSubmit(e)}
-          className="flex place-content-center absolute left-1/2 -translate-x-1/2 -translate-y-1/2">
+          className="flex place-content-center absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
           <div className="bg-white w-52 h-16 pl-4 pt-1 rounded-l-3xl">
             <span>Địa điểm: </span>
             <br />
@@ -296,15 +296,15 @@ const Home = () => {
           </div>
         </div>
         <hr />
-        <div className="flex">
-          <p className="text-lg basis-3/4">
+        <div className="flex items-center justify-between">
+          <p>
             © 2021 Airbnb, Inc. All rights reserved - Quyền riêng tư - Điều
             khoản - Sơ đồ trang web
           </p>
-          <div className="basis-1/4 text-lg pl-48">
-            <i className="fa-brands fa-facebook mr-3"></i>
-            <i className="fa-brands fa-twitter mr-3"></i>
-            <i className="fa-brands fa-instagram mr-3"></i>
+          <div>
+            <i className="fa-brands fa-facebook"></i>
+            <i className="fa-brands fa-twitter ml-3"></i>
+            <i className="fa-brands fa-instagram ml-3"></i>
           </div>
         </div>
       </div>

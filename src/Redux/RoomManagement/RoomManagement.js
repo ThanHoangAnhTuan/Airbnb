@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { TOKEN } from "../../util/config";
+import { TOKEN } from "../../util/config.js";
 
 const initialState = {
   roomListByPageIndex: [],
@@ -27,7 +27,7 @@ export const { getRoomListApiByPageIndexAction, getRoomBySearchApiAction } =
 
 export default RoomManagement.reducer;
 
-const getRoomListApiByPageIndex = (pageIndex) => {
+export const getRoomListApiByPageIndex = (pageIndex) => {
   return async (dispatch) => {
     try {
       let result = await axios({
@@ -46,7 +46,7 @@ const getRoomListApiByPageIndex = (pageIndex) => {
   };
 };
 
-const getRoomBySearchApi = (search) => {
+export const getRoomBySearchApi = (search) => {
   return async (dispatch) => {
     try {
       const result = await axios({
@@ -69,7 +69,7 @@ const getRoomBySearchApi = (search) => {
   };
 };
 
-const putRoomByIdApi = (data) => {
+export const putRoomByIdApi = (data) => {
   return async () => {
     try {
       const result = await axios({
@@ -88,7 +88,7 @@ const putRoomByIdApi = (data) => {
   };
 };
 
-const removeRoomByIdApi = (data) => {
+export const removeRoomByIdApi = (data) => {
   return async () => {
     try {
       const result = await axios({
@@ -106,7 +106,7 @@ const removeRoomByIdApi = (data) => {
   };
 };
 
-const createRoomByIdApi = (data, pageIndex) => {
+export const createRoomByIdApi = (data, pageIndex) => {
   return async (dispatch) => {
     try {
       const result = await axios({
@@ -124,12 +124,4 @@ const createRoomByIdApi = (data, pageIndex) => {
       return error;
     }
   };
-};
-
-export {
-  getRoomListApiByPageIndex,
-  getRoomBySearchApi,
-  putRoomByIdApi,
-  removeRoomByIdApi,
-  createRoomByIdApi,
 };

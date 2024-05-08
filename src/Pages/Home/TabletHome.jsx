@@ -66,20 +66,14 @@ const TabletHome = () => {
   return (
     <div>
       <div className="bg-black h-screen px-10 relative">
-        <header>
-          <nav className="flex items-center justify-between pt-5 px-10 pb-10">
+        <header className="pb-12">
+          <nav className="flex items-center justify-between pt-5 px-10">
             <div className="flex">
               <NavLink
                 to=""
                 className="text-4xl text-pink-500">
                 <i className="fa-brands fa-airbnb"></i>
-                
               </NavLink>
-            </div>
-            <div className="flex items-center text-white ">
-              <NavLink className="mx-5 text-base">Nơi ở</NavLink>
-              <NavLink className="mx-5 text-base">Trải nghiệm</NavLink>
-              <NavLink className="mx-5 text-base">Trải nghiệm trực tuyến</NavLink>
             </div>
             <div className="flex items-center justify-between text-white">
               <NavLink className="text-base">Đón tiếp khách</NavLink>
@@ -88,7 +82,7 @@ const TabletHome = () => {
                 <i className="fa-solid fa-globe"></i>
               </NavLink>
               <div
-                className="relative cursor-pointer flex items-center justify-around w-20 h-10 bg-gray-400 rounded-xl"
+                className="relative cursor-pointer flex items-center justify-around w-20 h-10 bg-gray-400 rounded-xl z-20"
                 onClick={() => setIsOpen(!isOpen)}>
                 {!isLogin && <i className="fa-solid fa-bars"></i>}
                 <i className="fa-solid fa-user"></i>
@@ -130,10 +124,15 @@ const TabletHome = () => {
               </div>
             </div>
           </nav>
+          <div className="text-white flex justify-center">
+            <NavLink className="mx-5 text-base">Nơi ở</NavLink>
+            <NavLink className="mx-5 text-base">Trải nghiệm</NavLink>
+            <NavLink className="mx-5 text-base">Trải nghiệm trực tuyến</NavLink>
+          </div>
         </header>
         <form
           onSubmit={(e) => handleSubmit(e)}
-          className="flex place-content-center absolute left-1/2 -translate-x-1/2 -translate-y-1/2">
+          className="flex place-content-center absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
           <div className="bg-white w-40 h-16 pl-4 pt-1 rounded-l-3xl">
             <span>Địa điểm: </span>
             <br />
@@ -196,8 +195,8 @@ const TabletHome = () => {
           </div>
         </form>
         <img
-          className="w-full h-[80%]"
-          src="./src/img/daLat.jpg"
+          className="w-full h-[75%] object-cover"
+          src="./img/daLat.jpg"
           alt=""
         />
       </div>
@@ -230,7 +229,7 @@ const TabletHome = () => {
               key={index}>
               <img
                 className="w-full h-80 rounded-xl border"
-                src={`./src/img/p${index + 1}.jpg`}
+                src={`./img/p${index + 1}.jpg`}
                 alt=""
               />
               <p className="font-semibold mt-3">Toàn bộ nhà</p>
