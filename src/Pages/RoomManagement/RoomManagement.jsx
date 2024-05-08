@@ -6,7 +6,7 @@ import {
   getRoomListApiByPageIndex,
   putRoomByIdApi,
   removeRoomByIdApi,
-} from "../../Redux/RoomManagement/RoomManagement";
+} from '../../Redux/RoomManagement/RoomManagement'
 
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Modal } from "antd";

@@ -27,7 +27,7 @@ export const { getRoomListApiByPageIndexAction, getRoomBySearchApiAction } =
 
 export default RoomManagement.reducer;
 
-export const getRoomListApiByPageIndex = (pageIndex) => {
+const getRoomListApiByPageIndex = (pageIndex) => {
   return async (dispatch) => {
     try {
       let result = await axios({
@@ -46,7 +46,7 @@ export const getRoomListApiByPageIndex = (pageIndex) => {
   };
 };
 
-export const getRoomBySearchApi = (search) => {
+const getRoomBySearchApi = (search) => {
   return async (dispatch) => {
     try {
       const result = await axios({
@@ -69,7 +69,7 @@ export const getRoomBySearchApi = (search) => {
   };
 };
 
-export const putRoomByIdApi = (data) => {
+const putRoomByIdApi = (data) => {
   return async () => {
     try {
       const result = await axios({
@@ -88,7 +88,7 @@ export const putRoomByIdApi = (data) => {
   };
 };
 
-export const removeRoomByIdApi = (data) => {
+const removeRoomByIdApi = (data) => {
   return async () => {
     try {
       const result = await axios({
@@ -106,7 +106,7 @@ export const removeRoomByIdApi = (data) => {
   };
 };
 
-export const createRoomByIdApi = (data, pageIndex) => {
+const createRoomByIdApi = (data, pageIndex) => {
   return async (dispatch) => {
     try {
       const result = await axios({
@@ -124,4 +124,12 @@ export const createRoomByIdApi = (data, pageIndex) => {
       return error;
     }
   };
+};
+
+export {
+  getRoomListApiByPageIndex,
+  getRoomBySearchApi,
+  putRoomByIdApi,
+  removeRoomByIdApi,
+  createRoomByIdApi,
 };

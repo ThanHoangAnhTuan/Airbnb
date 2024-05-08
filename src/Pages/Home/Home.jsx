@@ -202,7 +202,7 @@ const Home = () => {
         </form>
         <img
           className="w-full h-[80%]"
-          src="./src/img/img1.jpg"
+          src="/img/img1.jpg"
           alt=""
         />
       </div>
@@ -235,7 +235,7 @@ const Home = () => {
               key={index}>
               <img
                 className="w-full h-80 rounded-xl border"
-                src={`./src/img/p${index + 1}.jpg`}
+                src={`/img/p${index + 1}.jpg`}
                 alt=""
               />
               <p className="font-semibold mt-3">Toàn bộ nhà</p>

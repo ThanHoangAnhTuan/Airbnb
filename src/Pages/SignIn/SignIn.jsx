@@ -23,7 +23,6 @@ const SignIn = () => {
           text: "Đăng nhập thành công!",
           type: "success",
         });
-        console.log(response);
         setShowAlert(true);
         setIsLoggedIn(true);
         localStorage.setItem("user_id", response.data.content.token);
