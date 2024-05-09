@@ -56,9 +56,9 @@ export const getBookRoomBySearchApi = (id) => {
           tokenCybersoft: TOKEN,
         },
       });
-      dispatch(getBookRoomBySearchApiAction(result.data.content));
+      dispatch(getBookRoomBySearchApiAction([...[], result.data.content]));
     } catch (error) {
-      return error;
+      dispatch(getBookRoomBySearchApiAction([]));
     }
   };
 };

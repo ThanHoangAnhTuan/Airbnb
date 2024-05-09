@@ -148,7 +148,6 @@ const UserManagement = () => {
   }
 
   useEffect(() => {
-    console.log(search);
     if (search) {
       dispatch(getUserBySearchApi(search));
     } else {
@@ -195,8 +194,6 @@ const UserManagement = () => {
     keyWordRef.current = e.target.value;
   };
 
-  console.log(searchUserByEmail);
-  console.log(userListByPageIndex);
   return (
     <div className="p-5">
       <button
@@ -252,46 +249,45 @@ const UserManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {searchUserByEmail.length > 0 &&
-              searchUserByEmail.map((user, index) => (
-                <tr
-                  key={user.id}
-                  className="border">
-                  <td>{index + 1}</td>
-                  <td>{user.id}</td>
-                  <td>{user.name}</td>
-                  <td>
-                    {user.avatar && (
-                      <img
-                        className="h-20 w-20 object-contain rounded-full"
-                        src={user.avatar}
-                        alt="avatar"
-                      />
-                    )}
-                    {!user.avatar && (
-                      <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
-                    )}
-                  </td>
-                  <td>{user.birthday}</td>
-                  <td>{user.gender ? "Nam" : "Nữ"}</td>
-                  <td>{user.phone}</td>
-                  <td>{user.role}</td>
-                  <td>
-                    <button
-                      type="button"
-                      className="bg-blue-500 text-white px-5 py-1 mr-3"
-                      onClick={() => showModal(user, "update")}>
-                      Sửa
-                    </button>
-                    <button
-                      className="bg-red-500 text-white px-5 py-1"
-                      onClick={() => handleRemoveUser(user)}>
-                      Xoá
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            {(!search || searchUserByEmail.length === 0) &&
+            {searchUserByEmail.map((user, index) => (
+              <tr
+                key={user.id}
+                className="border">
+                <td>{index + 1}</td>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>
+                  {user.avatar && (
+                    <img
+                      className="h-20 w-20 object-contain rounded-full"
+                      src={user.avatar}
+                      alt="avatar"
+                    />
+                  )}
+                  {!user.avatar && (
+                    <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
+                  )}
+                </td>
+                <td>{user.birthday}</td>
+                <td>{user.gender ? "Nam" : "Nữ"}</td>
+                <td>{user.phone}</td>
+                <td>{user.role}</td>
+                <td>
+                  <button
+                    type="button"
+                    className="bg-blue-500 text-white px-5 py-1 mr-3"
+                    onClick={() => showModal(user, "update")}>
+                    Sửa
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-5 py-1"
+                    onClick={() => handleRemoveUser(user)}>
+                    Xoá
+                  </button>
+                </td>
+              </tr>
+            ))}
+            {!search &&
               userListByPageIndex.map((user, index) => {
                 return (
                   <tr

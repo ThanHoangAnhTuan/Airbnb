@@ -224,45 +224,44 @@ const LocationManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {searchLocationByName.length > 0 &&
-              searchLocationByName.map((location, index) => (
-                <tr
-                  key={location.id}
-                  className="border">
-                  <td>{index + 1}</td>
-                  <td>{location.id}</td>
-                  <td>{location.tenViTri}</td>
-                  <td>
-                    {location.hinhAnh && (
-                      <img
-                        className="h-20 w-20 object-contain rounded-full"
-                        src={location.hinhAnh}
-                        alt="hinhAnh"
-                      />
-                    )}
-                    {!location.hinhAnh && (
-                      <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
-                    )}
-                  </td>
-                  <td>{location.tinhThanh}</td>
-                  <td>{location.quocGia}</td>
-                  <td>
-                    <button
-                      type="button"
-                      className="bg-blue-500 text-white px-5 py-1 mr-3"
-                      onClick={() => showModal(location, "update")}>
-                      Sửa
-                    </button>
-                    <button
-                      className="bg-red-500 text-white px-5 py-1"
-                      onClick={() => handleRemoveLocation(location)}>
-                      Xoá
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            {(!search || searchLocationByName.length === 0) &&
-              locationListByPageIndex.map((location, index) => {
+            {searchLocationByName.map((location, index) => (
+              <tr
+                key={location.id}
+                className="border">
+                <td>{index + 1}</td>
+                <td>{location.id}</td>
+                <td>{location.tenViTri}</td>
+                <td>
+                  {location.hinhAnh && (
+                    <img
+                      className="h-20 w-20 object-contain rounded-full"
+                      src={location.hinhAnh}
+                      alt="hinhAnh"
+                    />
+                  )}
+                  {!location.hinhAnh && (
+                    <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
+                  )}
+                </td>
+                <td>{location.tinhThanh}</td>
+                <td>{location.quocGia}</td>
+                <td>
+                  <button
+                    type="button"
+                    className="bg-blue-500 text-white px-5 py-1 mr-3"
+                    onClick={() => showModal(location, "update")}>
+                    Sửa
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-5 py-1"
+                    onClick={() => handleRemoveLocation(location)}>
+                    Xoá
+                  </button>
+                </td>
+              </tr>
+            ))}
+            {!search &&
+              [...locationListByPageIndex].reverse().map((location, index) => {
                 return (
                   <tr
                     key={location.id}

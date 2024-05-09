@@ -89,7 +89,7 @@ const MobileRoomList = () => {
               {!isLogin && <i className="fa-solid fa-bars"></i>}
               <i className="fa-solid fa-user"></i>
               {isOpen && (
-                <div className="flex transition-all flex-col w-40 absolute right-0 top-full bg-white text-black">
+                <div className="flex transition-all flex-col w-40 absolute right-0 top-full bg-white text-black shadow-[0_3px_18px_rgba(0,0,0,0.3)]">
                   {!isLogin && (
                     <>
                       <NavLink

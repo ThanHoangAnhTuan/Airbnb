@@ -135,7 +135,6 @@ const BookRoomManagement = () => {
   }
 
   useEffect(() => {
-    console.log(search);
     if (search) {
       dispatch(getBookRoomBySearchApi(search));
     } else {
@@ -193,7 +192,7 @@ const BookRoomManagement = () => {
               maPhong: 0,
               ngayDen: "",
               ngayDi: "",
-              soLuongKhach: 0,
+              soLuongKhach: 1,
               maNguoiDung: 0,
             },
             "create"
@@ -233,34 +232,34 @@ const BookRoomManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {Object.keys(searchBookRoomByID).length > 0 && (
+            {searchBookRoomByID.map((room, index) => (
               <tr
-                key={searchBookRoomByID.id}
+                key={room.id}
                 className="border">
-                <td>{1}</td>
-                <td>{searchBookRoomByID.id}</td>
-                <td>{searchBookRoomByID.maPhong}</td>
-                <td>{searchBookRoomByID.ngayDen}</td>
-                <td>{searchBookRoomByID.ngayDi}</td>
-                <td>{searchBookRoomByID.soLuongKhach}</td>
-                <td>{searchBookRoomByID.maNguoiDung}</td>
+                <td>{index + 1}</td>
+                <td>{room.id}</td>
+                <td>{room.maPhong}</td>
+                <td>{room.ngayDen}</td>
+                <td>{room.ngayDi}</td>
+                <td>{room.soLuongKhach}</td>
+                <td>{room.maNguoiDung}</td>
                 <td>
                   <button
                     type="button"
                     className="bg-blue-500 text-white px-5 py-1 mr-3"
-                    onClick={() => showModal(searchBookRoomByID, "update")}>
+                    onClick={() => showModal(room, "update")}>
                     Sửa
                   </button>
                   <button
                     className="bg-red-500 text-white px-5 py-1"
-                    onClick={() => handleRemoveBookRoom(searchBookRoomByID)}>
+                    onClick={() => handleRemoveBookRoom(room)}>
                     Xoá
                   </button>
                 </td>
               </tr>
-            )}
-            {(!search || Object.keys(searchBookRoomByID).length === 0) &&
-              bookRoomListByPageIndex.map((bookRoom, index) => {
+            ))}
+            {!search &&
+              [...bookRoomListByPageIndex].reverse().map((bookRoom, index) => {
                 return (
                   <tr
                     key={bookRoom.id}
@@ -329,7 +328,7 @@ const BookRoomManagement = () => {
             />
           </div>
           <div className="flex flex-row items-center justify-between mb-3">
-            <label htmlFor="soLuongKhach">Số lượng khác</label>
+            <label htmlFor="soLuongKhach">Số lượng khách</label>
             <input
               value={bookRoomInfoUpdate.soLuongKhach}
               name="soLuongKhach"
@@ -351,7 +350,7 @@ const BookRoomManagement = () => {
         </Modal>
         <Toast ref={toast} />
       </div>
-      {Object.keys(searchBookRoomByID).length === 0 &&
+      {searchBookRoomByID.length === 0 &&
         bookRoomListByPageIndex.length > 0 && (
           <div>
             <ul className="flex justify-center">{renderPaginator()}</ul>

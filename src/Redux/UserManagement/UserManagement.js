@@ -55,12 +55,21 @@ export const getUserBySearchApi = (search) => {
           tokenCybersoft: TOKEN,
         },
       });
-      const findUser = result.data.content.data.filter((user) => {
-        if (user.name.toLowerCase().includes(search.toLowerCase())) {
-          return user;
-        }
-      });
-      dispatch(getUserBySearchApiAction(findUser));
+      if (String(search).includes("@")) {
+        const findUser = result.data.content.data.filter((user) => {
+          if (user.email.toLowerCase() === search.toLowerCase()) {
+            return user;
+          }
+        });
+        dispatch(getUserBySearchApiAction(findUser));
+      } else {
+        const findUser = result.data.content.data.filter((user) => {
+          if (user.name.toLowerCase().includes(search.toLowerCase())) {
+            return user;
+          }
+        });
+        dispatch(getUserBySearchApiAction(findUser));
+      }
     } catch (error) {
       return error;
     }

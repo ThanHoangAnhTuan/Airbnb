@@ -294,49 +294,48 @@ const RoomManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {searchRoomByName.length > 0 &&
-              searchRoomByName.map((room, index) => (
-                <tr
-                  key={room.id}
-                  className="border">
-                  <td>{index + 1}</td>
-                  <td>{room.id}</td>
-                  <td>{room.tenPhong}</td>
-                  <td>
-                    {room.hinhAnh && (
-                      <img
-                        className="h-20 w-20 object-contain rounded-full"
-                        src={room.hinhAnh}
-                        alt="hinhAnh"
-                      />
-                    )}
-                    {!room.hinhAnh && (
-                      <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
-                    )}
-                  </td>
-                  <td>
-                    {room.moTa.length > 50
-                      ? room.moTa.slice(0, 50) + "..."
-                      : room.moTa}
-                  </td>
-                  <td>${room.giaTien}/ Tháng</td>
-                  <td>
-                    <button
-                      type="button"
-                      className="bg-blue-500 text-white px-5 py-1 mr-3"
-                      onClick={() => showModal(room, "update")}>
-                      Sửa
-                    </button>
-                    <button
-                      className="bg-red-500 text-white px-5 py-1"
-                      onClick={() => handleRemoveRoom(room)}>
-                      Xoá
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            {(!search || searchRoomByName.length === 0) &&
-              roomListByPageIndex.map((room, index) => {
+            {searchRoomByName.map((room, index) => (
+              <tr
+                key={room.id}
+                className="border">
+                <td>{index + 1}</td>
+                <td>{room.id}</td>
+                <td>{room.tenPhong}</td>
+                <td>
+                  {room.hinhAnh && (
+                    <img
+                      className="h-20 w-20 object-contain rounded-full"
+                      src={room.hinhAnh}
+                      alt="hinhAnh"
+                    />
+                  )}
+                  {!room.hinhAnh && (
+                    <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
+                  )}
+                </td>
+                <td>
+                  {room.moTa.length > 50
+                    ? room.moTa.slice(0, 50) + "..."
+                    : room.moTa}
+                </td>
+                <td>${room.giaTien}/ Tháng</td>
+                <td>
+                  <button
+                    type="button"
+                    className="bg-blue-500 text-white px-5 py-1 mr-3"
+                    onClick={() => showModal(room, "update")}>
+                    Sửa
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-5 py-1"
+                    onClick={() => handleRemoveRoom(room)}>
+                    Xoá
+                  </button>
+                </td>
+              </tr>
+            ))}
+            {!search &&
+              [...roomListByPageIndex].reverse().map((room, index) => {
                 return (
                   <tr
                     key={room.id}
