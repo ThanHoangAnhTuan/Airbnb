@@ -5,6 +5,7 @@ import { Modal } from "antd";
 import { Toast } from "primereact/toast";
 import {
   createRoomByIdApi,
+  getLocationApi,
   getRoomBySearchApi,
   getRoomListApiByPageIndex,
   putRoomByIdApi,
@@ -17,9 +18,8 @@ const RoomManagement = () => {
   const [pageIndex, setPageIndex] = useState(1);
   let [searchParams, setSearchParams] = useSearchParams();
   const keyWordRef = useRef("");
-  const { roomListByPageIndex, paginator, searchRoomByName } = useSelector(
-    (state) => state.RoomManagement
-  );
+  const { roomListByPageIndex, paginator, searchRoomByName, location } =
+    useSelector((state) => state.RoomManagement);
   const search = searchParams.get("keyword");
 
   const [roomInfoUpdate, setRoomInfoUpdate] = useState({
@@ -185,6 +185,10 @@ const RoomManagement = () => {
   }
 
   useEffect(() => {
+    dispatch(getLocationApi());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (search) {
       dispatch(getRoomBySearchApi(search));
     } else {
@@ -255,7 +259,7 @@ const RoomManagement = () => {
               doXe: false,
               hoBoi: false,
               banUi: false,
-              maViTri: 0,
+              maViTri: 1,
               hinhAnh: "",
             },
             "create"
@@ -301,16 +305,20 @@ const RoomManagement = () => {
                 <td>{index + 1}</td>
                 <td>{room.id}</td>
                 <td>{room.tenPhong}</td>
-                <td>
+                <td className="w-[82px]">
                   {room.hinhAnh && (
                     <img
-                      className="h-20 w-20 object-contain rounded-full"
+                      className="h-20 w-20 object-cover rounded-full"
                       src={room.hinhAnh}
                       alt="hinhAnh"
                     />
                   )}
                   {!room.hinhAnh && (
-                    <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
+                    <div className="h-20 w-20 object-cover rounded-full bg-gray-300 flex items-center justify-center text-3xl">
+                      {room.tenPhong[
+                        room.tenPhong.lastIndexOf(" ") + 1
+                      ]?.toUpperCase()}
+                    </div>
                   )}
                 </td>
                 <td>
@@ -343,16 +351,20 @@ const RoomManagement = () => {
                     <td>{index + 1}</td>
                     <td>{room.id}</td>
                     <td>{room.tenPhong}</td>
-                    <td>
+                    <td className="w-[82px]">
                       {room.hinhAnh && (
                         <img
-                          className="h-20 w-20 object-contain rounded-full"
+                          className="h-20 !w-20 object-cover rounded-full block"
                           src={room.hinhAnh}
                           alt="hinhAnh"
                         />
                       )}
                       {!room.hinhAnh && (
-                        <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
+                        <div className="h-20 w-20 object-cover rounded-full bg-gray-300 flex items-center justify-center text-3xl">
+                          {room.tenPhong[
+                            room.tenPhong.lastIndexOf(" ") + 1
+                          ]?.toUpperCase()}
+                        </div>
                       )}
                     </td>
                     <td>
@@ -418,14 +430,20 @@ const RoomManagement = () => {
           <div className="grid grid-cols-2 gap-5">
             <div className="w-full flex flex-col">
               <label htmlFor="maViTri">Mã vị trí</label>
-              <input
-                value={roomInfoUpdate.maViTri}
+              <select
                 name="maViTri"
-                type="number"
-                min={0}
-                className="border outline-none p-3"
+                value={roomInfoUpdate.maViTri}
+                className="w-full outline-none border p-3"
                 onChange={(e) => handleChange(e)}
-              />
+                id="maViTri">
+                {location.map((item) => (
+                  <option
+                    key={item.id}
+                    value={item.id}>
+                    {item.id}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="w-full flex flex-col">
               <label htmlFor="giaTien">Giá tiền</label>

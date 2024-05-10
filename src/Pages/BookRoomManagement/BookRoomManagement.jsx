@@ -4,6 +4,8 @@ import {
   createBookRoomByIdApi,
   getBookRoomBySearchApi,
   getBookRoomListApiByPageIndex,
+  getRoomIdApi,
+  getUserIdApi,
   putBookRoomByIdApi,
   removeBookRoomByIdApi,
 } from "../../Redux/BookRoomManagement/BookRoomManagement";
@@ -19,8 +21,13 @@ const BookRoomManagement = () => {
   const [pageIndex, setPageIndex] = useState(1);
   let [searchParams, setSearchParams] = useSearchParams();
   const keyWordRef = useRef("");
-  const { bookRoomListByPageIndex, paginator, searchBookRoomByID } =
-    useSelector((state) => state.BookRoomManagement);
+  const {
+    bookRoomListByPageIndex,
+    paginator,
+    searchBookRoomByID,
+    roomId,
+    userIdList,
+  } = useSelector((state) => state.BookRoomManagement);
   const search = searchParams.get("keyword");
 
   const [bookRoomInfoUpdate, setBookRoomInfoUpdate] = useState({
@@ -133,6 +140,11 @@ const BookRoomManagement = () => {
       [e.target.name]: e.target.value,
     });
   }
+
+  useEffect(() => {
+    dispatch(getRoomIdApi());
+    dispatch(getUserIdApi());
+  }, [dispatch]);
 
   useEffect(() => {
     if (search) {
@@ -299,13 +311,20 @@ const BookRoomManagement = () => {
           onCancel={handleCancel}>
           <div className="flex flex-row items-center justify-between mb-3">
             <label htmlFor="maPhong">Mã phòng</label>
-            <input
-              value={bookRoomInfoUpdate.maPhong}
+            <select
               name="maPhong"
-              type="text"
-              className="ml-5 border outline-none w-[350px] p-3"
+              value={bookRoomInfoUpdate.maPhong}
+              className="w-[350px] outline-none border p-3"
               onChange={(e) => handleChange(e)}
-            />
+              id="maPhong">
+              {roomId.map((item) => (
+                <option
+                  key={item.id}
+                  value={item.id}>
+                  {item.id}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex flex-row items-center justify-between mb-3">
             <label htmlFor="ngayDen">Ngày đến</label>
@@ -339,13 +358,20 @@ const BookRoomManagement = () => {
           </div>
           <div className="flex flex-row items-center justify-between mb-3">
             <label htmlFor="maNguoiDung">Mã người dùng</label>
-            <input
-              value={bookRoomInfoUpdate.maNguoiDung}
+            <select
               name="maNguoiDung"
-              type="text"
-              className="ml-5 border outline-none w-[350px] p-3"
+              value={bookRoomInfoUpdate.maNguoiDung}
+              className="w-[350px] outline-none border p-3"
               onChange={(e) => handleChange(e)}
-            />
+              id="maNguoiDung">
+              {userIdList.map((item) => (
+                <option
+                  key={item.id}
+                  value={item.id}>
+                  {item.id}
+                </option>
+              ))}
+            </select>
           </div>
         </Modal>
         <Toast ref={toast} />

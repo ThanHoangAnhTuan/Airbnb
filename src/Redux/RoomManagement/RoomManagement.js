@@ -6,6 +6,7 @@ const initialState = {
   roomListByPageIndex: [],
   paginator: 0,
   searchRoomByName: [],
+  location: [],
 };
 
 const RoomManagement = createSlice({
@@ -19,11 +20,17 @@ const RoomManagement = createSlice({
     getRoomBySearchApiAction: (state, action) => {
       state.searchRoomByName = action.payload;
     },
+    getLocationApiAction: (state, action) => {
+      state.location = action.payload;
+    },
   },
 });
 
-export const { getRoomListApiByPageIndexAction, getRoomBySearchApiAction } =
-  RoomManagement.actions;
+export const {
+  getRoomListApiByPageIndexAction,
+  getRoomBySearchApiAction,
+  getLocationApiAction,
+} = RoomManagement.actions;
 
 export default RoomManagement.reducer;
 
@@ -120,6 +127,28 @@ export const createRoomByIdApi = (data, pageIndex) => {
       });
       dispatch(getRoomListApiByPageIndex(pageIndex));
       return result;
+    } catch (error) {
+      return error;
+    }
+  };
+};
+
+export const getLocationApi = () => {
+  return async (dispatch) => {
+    try {
+      const result = await axios({
+        url: "https://airbnbnew.cybersoft.edu.vn/api/vi-tri",
+        method: "GET",
+        headers: {
+          tokenCybersoft: TOKEN,
+        },
+      });
+      const data = result.data.content.map((item) => {
+        return {
+          id: item.id,
+        };
+      });
+      dispatch(getLocationApiAction(data));
     } catch (error) {
       return error;
     }

@@ -107,3 +107,23 @@ export const getRoomDetailListApi = (ids) => {
     }
   };
 };
+
+export const uploadAvatarApi = (model) => {
+  return async (dispatch) => {
+    try {
+      const result = await axios({
+        url: `https://airbnbnew.cybersoft.edu.vn/api/users/upload-avatar`,
+        method: "POST",
+        data: model,
+        headers: {
+          tokenCybersoft: TOKEN,
+          token: localStorage.getItem("user_id"),
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      dispatch(getUserByIdApiAction(result.data.content));
+    } catch (error) {
+      return error;
+    }
+  };
+};

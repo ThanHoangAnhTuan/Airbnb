@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import api from "../../utils/config";
+import "./home.css";
 
 const Home = () => {
   const searchRef = useRef();
@@ -65,9 +66,9 @@ const Home = () => {
 
   return (
     <div className="">
-      <div className="bg-black h-screen px-10 relative">
-        <header>
-          <nav className="flex items-center justify-between pt-5 px-10 pb-10">
+      <div className="h-screen relative">
+        <header className="h-28">
+          <nav className="flex items-center justify-between px-20 py-5 h-full">
             <div className="flex">
               <NavLink
                 to=""
@@ -76,12 +77,12 @@ const Home = () => {
                 <span> airbnb</span>
               </NavLink>
             </div>
-            <div className="flex items-center text-white ">
+            <div className="flex items-center text-black ">
               <NavLink className="mx-5 text-lg">Nơi ở</NavLink>
               <NavLink className="mx-5 text-lg">Trải nghiệm</NavLink>
               <NavLink className="mx-5 text-lg">Trải nghiệm trực tuyến</NavLink>
             </div>
-            <div className="flex items-center justify-between text-white">
+            <div className="flex items-center justify-between text-black">
               <NavLink className="text-lg">Đón tiếp khách</NavLink>
               <NavLink className="mx-5">
                 {" "}
@@ -201,7 +202,7 @@ const Home = () => {
           </div>
         </form>
         <img
-          className="w-full h-[80%]"
+          className="carousel_home w-full"
           src="/img/img1.jpg"
           alt=""
         />
@@ -210,7 +211,8 @@ const Home = () => {
         <h4 className="text-2xl mb-5">Khám phá những điểm đến gần đây</h4>
         <div className="grid grid-cols-4 gap-4">
           {nearbyLocation.map((location, index) => (
-            <div
+            <NavLink
+              to={`/search/${location.tinhThanh}`}
               className="inline-flex"
               key={index}>
               <img
@@ -222,7 +224,7 @@ const Home = () => {
                 <p className="font-semibold">{location.tinhThanh}</p>
                 <span>15 phút lái xe</span>
               </div>
-            </div>
+            </NavLink>
           ))}
         </div>
       </div>

@@ -65,7 +65,7 @@ const MobileHome = () => {
 
   return (
     <div className="">
-      <div className="bg-black h-screen px-10 relative">
+      <div className="h-screen relative">
         <header>
           <nav className="flex items-center justify-between pt-5 px-10 pb-10">
             <div className="flex">
@@ -73,7 +73,7 @@ const MobileHome = () => {
                 to=""
                 className="text-3xl text-pink-500">
                 <i className="fa-brands fa-airbnb"></i>
-                {/* <span> airbnb</span> */}
+                <span> airbnb</span>
               </NavLink>
             </div>
             <div className="flex items-center justify-between text-white">
@@ -159,7 +159,7 @@ const MobileHome = () => {
           </div>
         </form>
         <img
-          className="w-full h-[80%]"
+          className="w-full carousel_mobilehome"
           src="./img/daLat.jpg"
           alt=""
         />

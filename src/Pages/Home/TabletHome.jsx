@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import api from "../../utils/config";
+import "./home.css"
 
 const TabletHome = () => {
   const searchRef = useRef();
@@ -65,7 +66,7 @@ const TabletHome = () => {
 
   return (
     <div>
-      <div className="bg-black h-screen px-10 relative">
+      <div className="h-screen relative">
         <header className="pb-12">
           <nav className="flex items-center justify-between pt-5 px-10">
             <div className="flex">
@@ -75,7 +76,7 @@ const TabletHome = () => {
                 <i className="fa-brands fa-airbnb"></i>
               </NavLink>
             </div>
-            <div className="flex items-center justify-between text-white">
+            <div className="flex items-center justify-between text-black">
               <NavLink className="text-base">Đón tiếp khách</NavLink>
               <NavLink className="mx-5">
                 {" "}
@@ -124,7 +125,7 @@ const TabletHome = () => {
               </div>
             </div>
           </nav>
-          <div className="text-white flex justify-center">
+          <div className="text-black flex justify-center">
             <NavLink className="mx-5 text-base">Nơi ở</NavLink>
             <NavLink className="mx-5 text-base">Trải nghiệm</NavLink>
             <NavLink className="mx-5 text-base">Trải nghiệm trực tuyến</NavLink>
@@ -195,7 +196,7 @@ const TabletHome = () => {
           </div>
         </form>
         <img
-          className="w-full h-[75%] object-cover"
+          className="w-full carousel_tablethome"
           src="./img/daLat.jpg"
           alt=""
         />

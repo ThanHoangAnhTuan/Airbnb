@@ -79,20 +79,20 @@ const LocationManagement = () => {
       const result = await dispatch(
         createLocationByIdApi(locationInfoUpdate, pageIndex)
       );
-      if (result.response?.status === 400) {
-        toast.current.show({
-          severity: "error",
-          summary: "Error",
-          detail: result.response.data.content,
-        });
-        setOpen(true);
-      } else {
+      if (result?.data?.statusCode === 201) {
         toast.current.show({
           severity: "success",
           summary: "Success",
           detail: "Thêm thành công",
         });
         setOpen(false);
+      } else {
+        toast.current.show({
+          severity: "error",
+          summary: "Error",
+          detail: result.response.data.content,
+        });
+        setOpen(true);
       }
     }
   };
@@ -234,13 +234,17 @@ const LocationManagement = () => {
                 <td>
                   {location.hinhAnh && (
                     <img
-                      className="h-20 w-20 object-contain rounded-full"
+                      className="h-20 w-20 object-cover rounded-full"
                       src={location.hinhAnh}
                       alt="hinhAnh"
                     />
                   )}
                   {!location.hinhAnh && (
-                    <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
+                    <div className="h-20 w-20 object-cover rounded-full bg-gray-300 flex items-center justify-center text-3xl">
+                      {location.tenViTri[
+                        location.tenViTri.lastIndexOf(" ") + 1
+                      ]?.toUpperCase()}
+                    </div>
                   )}
                 </td>
                 <td>{location.tinhThanh}</td>
@@ -272,13 +276,17 @@ const LocationManagement = () => {
                     <td>
                       {location.hinhAnh && (
                         <img
-                          className="h-20 w-20 object-contain rounded-full"
+                          className="h-20 w-20 object-cover rounded-full"
                           src={location.hinhAnh}
                           alt="hinhAnh"
                         />
                       )}
                       {!location.hinhAnh && (
-                        <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
+                        <div className="h-20 w-20 object-cover rounded-full bg-gray-300 flex items-center justify-center text-3xl">
+                          {location.tenViTri[
+                            location.tenViTri.lastIndexOf(" ") + 1
+                          ]?.toUpperCase()}
+                        </div>
                       )}
                     </td>
                     <td>{location.tinhThanh}</td>

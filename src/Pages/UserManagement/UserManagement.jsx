@@ -259,13 +259,15 @@ const UserManagement = () => {
                 <td>
                   {user.avatar && (
                     <img
-                      className="h-20 w-20 object-contain rounded-full"
+                      className="h-20 w-20 object-cover rounded-full"
                       src={user.avatar}
                       alt="avatar"
                     />
                   )}
                   {!user.avatar && (
-                    <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
+                    <div className="h-20 w-20 object-cover rounded-full bg-gray-300 flex items-center justify-center text-3xl">
+                      {user.name[user.name.lastIndexOf(" ") + 1]?.toUpperCase()}
+                    </div>
                   )}
                 </td>
                 <td>{user.birthday}</td>
@@ -299,13 +301,17 @@ const UserManagement = () => {
                     <td>
                       {user.avatar && (
                         <img
-                          className="h-20 w-20 object-contain rounded-full"
+                          className="h-20 w-20 object-cover rounded-full"
                           src={user.avatar}
                           alt="avatar"
                         />
                       )}
                       {!user.avatar && (
-                        <div className="h-20 w-20 object-contain rounded-full bg-gray-300"></div>
+                        <div className="h-20 w-20 object-cover rounded-full bg-gray-300 flex items-center justify-center text-3xl">
+                          {user.name[
+                            user.name.lastIndexOf(" ") + 1
+                          ]?.toUpperCase()}
+                        </div>
                       )}
                     </td>
                     <td>{user.birthday}</td>
@@ -428,7 +434,7 @@ const UserManagement = () => {
             <select
               name="role"
               className="w-[380px] outline-none border p-3"
-              defaultValue={userInfoUpdate.role}
+              value={userInfoUpdate.role}
               onChange={(e) => handleChange(e)}
               id="role">
               <option value="ADMIN">Amin</option>

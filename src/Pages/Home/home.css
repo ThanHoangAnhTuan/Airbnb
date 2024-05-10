@@ -1,0 +1,11 @@
+.carousel_home {
+  height: calc(100vh - 112px);
+}
+
+.carousel_tablethome {
+  height: calc(100vh - 132px);
+}
+
+.carousel_mobilehome {
+  height: calc(100vh - 100px);
+}
