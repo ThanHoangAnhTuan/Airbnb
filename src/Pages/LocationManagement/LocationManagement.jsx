@@ -193,7 +193,7 @@ const LocationManagement = () => {
         }>
         Thêm vị trí
       </button>
-      <div className="flex my-5 w-[800px] border items-center rounded-full overflow-hidden pl-5 pr-2 h-[50px]">
+      <div className="flex my-5 w-full max-w-[800px] border items-center rounded-full overflow-hidden pl-5 pr-2 h-[50px]">
         <form
           onSubmit={handleSubmit}
           className="flex-1 flex">
@@ -210,7 +210,7 @@ const LocationManagement = () => {
           </button>
         </form>
       </div>
-      <div className="overflow-x-hidden overflow-y-auto h-[450px]">
+      <div className="overflow-auto h-[450px]">
         <table className="w-full">
           <thead>
             <tr className="border">

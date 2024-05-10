@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import api from "../../utils/config";
-import "./home.css"
+import "./home.css";
+import { jwtDecode } from "jwt-decode";
 
 const TabletHome = () => {
   const searchRef = useRef();
@@ -13,7 +14,7 @@ const TabletHome = () => {
   const isLogin = token ? true : false;
   let decoded;
   if (token) {
-    decoded = JSON.parse(atob(token?.split(".")[1]));
+    decoded = jwtDecode(token);
   }
   const navigate = useNavigate();
   const [nearbyLocation, setNearbyLocation] = useState([]);
@@ -66,7 +67,7 @@ const TabletHome = () => {
 
   return (
     <div>
-      <div className="h-screen relative">
+      <div className="h-screen w-screen relative">
         <header className="pb-12">
           <nav className="flex items-center justify-between pt-5 px-10">
             <div className="flex">
@@ -74,6 +75,7 @@ const TabletHome = () => {
                 to=""
                 className="text-4xl text-pink-500">
                 <i className="fa-brands fa-airbnb"></i>
+                <span> airbnb</span>
               </NavLink>
             </div>
             <div className="flex items-center justify-between text-black">
@@ -118,8 +120,18 @@ const TabletHome = () => {
                           className={"px-5 py-3 hover:bg-gray-300"}>
                           Tài khoản
                         </NavLink>
+                        {
+                          decoded?.role === "ADMIN" && (
+                            <NavLink
+                              to={`/management/user`}
+                              className={"px-5 py-3 hover:bg-gray-300"}>
+                              Quản lý
+                            </NavLink>
+                          )
+                        }
                       </>
                     )}
+
                   </div>
                 )}
               </div>
@@ -196,7 +208,7 @@ const TabletHome = () => {
           </div>
         </form>
         <img
-          className="w-full carousel_tablethome"
+          className="w-screen carousel_tablethome"
           src="./img/daLat.jpg"
           alt=""
         />
@@ -205,7 +217,8 @@ const TabletHome = () => {
         <h4 className="text-2xl mb-5">Khám phá những điểm đến gần đây</h4>
         <div className="grid grid-cols-3 gap-3">
           {nearbyLocation.map((location, index) => (
-            <div
+            <NavLink
+              to={`/search/${location.tinhThanh}`}
               className="inline-flex"
               key={index}>
               <img
@@ -217,7 +230,7 @@ const TabletHome = () => {
                 <p className="font-semibold">{location.tinhThanh}</p>
                 <span>15 phút lái xe</span>
               </div>
-            </div>
+            </NavLink>
           ))}
         </div>
       </div>

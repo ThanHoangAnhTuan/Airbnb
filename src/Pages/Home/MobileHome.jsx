@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import api from "../../utils/config";
+import { jwtDecode } from "jwt-decode";
 
 const MobileHome = () => {
   const searchRef = useRef();
@@ -12,7 +13,7 @@ const MobileHome = () => {
   const isLogin = token ? true : false;
   let decoded;
   if (token) {
-    decoded = JSON.parse(atob(token?.split(".")[1]));
+    decoded = jwtDecode(token);
   }
   const navigate = useNavigate();
   const [nearbyLocation, setNearbyLocation] = useState([]);
@@ -113,8 +114,18 @@ const MobileHome = () => {
                           className={"px-5 py-3 hover:bg-gray-300"}>
                           Tài khoản
                         </NavLink>
+                        {
+                          decoded?.role === "ADMIN" && (
+                            <NavLink
+                              to={`/management/user`}
+                              className={"px-5 py-3 hover:bg-gray-300"}>
+                              Quản lý
+                            </NavLink>
+                          )
+                        }
                       </>
                     )}
+
                   </div>
                 )}
               </div>
@@ -168,7 +179,8 @@ const MobileHome = () => {
         <h4 className="text-lg mb-5">Khám phá những điểm đến gần đây</h4>
         <div className="grid grid-cols-2 gap-3">
           {nearbyLocation.map((location, index) => (
-            <div
+            <NavLink
+              to={`/search/${location.tinhThanh}`}
               className="inline-flex"
               key={index}>
               <img
@@ -180,7 +192,7 @@ const MobileHome = () => {
                 <p className="font-semibold">{location.tinhThanh}</p>
                 <span>15 phút lái xe</span>
               </div>
-            </div>
+            </NavLink>
           ))}
         </div>
       </div>

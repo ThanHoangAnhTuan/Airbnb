@@ -4,6 +4,7 @@ import {
   getRoomDetailListApi,
   getUserByIdApi,
   putUserByIdApi,
+  uploadAvatarApi,
 } from "../../Redux/UserInfo/UserInfo";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -15,15 +16,25 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import { Calendar } from "primereact/calendar";
 import { Toast } from "primereact/toast";
 import { v4 as uuidv4 } from "uuid";
+import { jwtDecode } from "jwt-decode";
 
 const TabletUserInfo = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const toast = useRef(null);
   const [open, setOpen] = useState(false);
+  const [openImage, setOpenImage] = useState(false);
   const { userInfo, bookedRoom, bookedRoomDetail } = useSelector(
     (state) => state.UserInfo
   );
+  const [isOpen, setIsOpen] = useState(false);
+  const token = localStorage.getItem("user_id");
+  const isLogin = token ? true : false;
+  let decoded;
+  if (token) {
+    decoded = jwtDecode(token)
+  }
+  const navigate = useNavigate();
   const [userInfoUpdate, setUserInfoUpdate] = useState({
     avatar: "",
     birthday: "",
@@ -36,14 +47,6 @@ const TabletUserInfo = () => {
     role: "",
   });
   const { avatar, name } = userInfo;
-  const [isOpen, setIsOpen] = useState(false);
-  const token = localStorage.getItem("user_id");
-  const isLogin = token ? true : false;
-  let decoded;
-  if (token) {
-    decoded = JSON.parse(atob(token?.split(".")[1]));
-  }
-  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getUserByIdApi(params.userId));
@@ -96,7 +99,7 @@ const TabletUserInfo = () => {
         summary: "Success",
         detail: "Chỉnh sửa thành công",
       });
-      dispatch(getUserByIdApi(params.userId));
+      await dispatch(getUserByIdApi(params.userId));
       setOpen(false);
     }
   };
@@ -107,6 +110,28 @@ const TabletUserInfo = () => {
 
   const showModal = () => {
     setOpen(true);
+  };
+
+  const handleCancelImage = () => {
+    setOpenImage(false);
+  };
+
+  const showModalImage = () => {
+    setOpenImage(true);
+  };
+
+  const [infoImage, setInfoImage] = useState(null);
+
+  const handleChangeImage = (e) => {
+    const file = e.target.files[0];
+    setInfoImage(file);
+  };
+
+  const handleOKImage = async () => {
+    let formData = new FormData();
+    formData.append("formFile", infoImage);
+    await dispatch(uploadAvatarApi(formData));
+    handleCancelImage();
   };
 
   function handleChange(e) {
@@ -126,8 +151,8 @@ const TabletUserInfo = () => {
 
   return (
     <PrimeReactProvider>
-      <header>
-        <nav className="flex items-center justify-between pt-5 px-10 pb-10">
+      <header className="px-20">
+        <nav className="flex items-center justify-between pt-5 pb-10">
           <div className="flex">
             <NavLink
               to="/"
@@ -173,11 +198,15 @@ const TabletUserInfo = () => {
                         }}>
                         Đăng xuất
                       </button>
-                      <NavLink
-                        to={`/userinfo/${decoded.id}`}
-                        className={"px-5 py-3 hover:bg-gray-300"}>
-                        Tài khoản
-                      </NavLink>
+                      {
+                        decoded?.role === "ADMIN" && (
+                          <NavLink
+                            to={`/management/user`}
+                            className={"px-5 py-3 hover:bg-gray-300"}>
+                            Quản lý
+                          </NavLink>
+                        )
+                      }
                     </>
                   )}
                 </div>
@@ -186,15 +215,43 @@ const TabletUserInfo = () => {
           </div>
         </nav>
       </header>
-      <div className="flex gap-10 px-10 py-10">
+      <div className="flex gap-20 px-20 py-10">
         <div className="w-1/3 border p-5 h-fit">
           <div className="flex flex-col items-center">
-            <img
-              className="h-28 w-28 rounded-full"
-              src={avatar}
-              alt="avatar"
-            />
-            <div className="underline">Cập nhật ảnh</div>
+            {avatar && (
+              <img
+                className="h-28 w-28 rounded-full"
+                src={avatar}
+                alt="avatar"
+              />
+            )}
+            {!avatar && (
+              <div className="h-28 w-28 rounded-full flex items-center justify-center bg-gray-300 font-bold">
+                {name
+                  ?.slice(name?.lastIndexOf(" "), name?.length)
+                  ?.toUpperCase()}
+              </div>
+            )}
+            <button
+              className="underline"
+              onClick={showModalImage}>
+              Cập nhật ảnh
+            </button>
+            <Modal
+              title="Chỉnh sửa thông tin người dùng"
+              open={openImage}
+              onOk={handleOKImage}
+              onCancel={handleCancelImage}>
+              <div className="flex flex-row items-center justify-between mb-3">
+                <label htmlFor="name">Image</label>
+                <input
+                  name="name"
+                  type="file"
+                  className="ml-5 border outline-none w-[380px] p-3"
+                  onChange={(e) => handleChangeImage(e)}
+                />
+              </div>
+            </Modal>
           </div>
           <div>
             <span className="material-symbols-outlined">verified_user</span>

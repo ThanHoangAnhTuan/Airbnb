@@ -15,6 +15,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import { Calendar } from "primereact/calendar";
 import "./RoomDetail.css";
 import { Toast } from "primereact/toast";
+import { jwtDecode } from "jwt-decode";
 
 const MobileRoomDetail = () => {
   const params = useParams();
@@ -64,7 +65,7 @@ const MobileRoomDetail = () => {
   const isLogin = token ? true : false;
   let decoded;
   if (token) {
-    decoded = JSON.parse(atob(token.split(".")[1]));
+    decoded = jwtDecode(token)
   }
 
   useEffect(() => {
@@ -162,11 +163,6 @@ const MobileRoomDetail = () => {
             </NavLink>
           </div>
           <div className="flex items-center justify-between text-black">
-            <NavLink className="text-lg">Đón tiếp khách</NavLink>
-            <NavLink className="mx-5">
-              {" "}
-              <i className="fa-solid fa-globe"></i>
-            </NavLink>
             <div
               className="relative cursor-pointer flex items-center justify-around w-20 h-12 bg-gray-300 rounded-xl"
               onClick={() => setIsOpen(!isOpen)}>
@@ -203,6 +199,15 @@ const MobileRoomDetail = () => {
                         className={"px-5 py-3 hover:bg-gray-300"}>
                         Tài khoản
                       </NavLink>
+                      {
+                        decoded?.role === "ADMIN" && (
+                          <NavLink
+                            to={`/management/user`}
+                            className={"px-5 py-3 hover:bg-gray-300"}>
+                            Quản lý
+                          </NavLink>
+                        )
+                      }
                     </>
                   )}
                 </div>

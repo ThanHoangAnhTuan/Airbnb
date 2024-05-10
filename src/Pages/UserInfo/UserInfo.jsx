@@ -16,6 +16,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import { Calendar } from "primereact/calendar";
 import { Toast } from "primereact/toast";
 import { v4 as uuidv4 } from "uuid";
+import { jwtDecode } from "jwt-decode";
 
 const UserInfo = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ const UserInfo = () => {
   const isLogin = token ? true : false;
   let decoded;
   if (token) {
-    decoded = JSON.parse(atob(token?.split(".")[1]));
+    decoded = jwtDecode(token)
   }
   const navigate = useNavigate();
   const [userInfoUpdate, setUserInfoUpdate] = useState({
@@ -98,7 +99,7 @@ const UserInfo = () => {
         summary: "Success",
         detail: "Chỉnh sửa thành công",
       });
-      dispatch(getUserByIdApi(params.userId));
+      await dispatch(getUserByIdApi(params.userId));
       setOpen(false);
     }
   };
@@ -202,18 +203,17 @@ const UserInfo = () => {
                         }}>
                         Đăng xuất
                       </button>
-                      <NavLink
-                        to={`/userinfo/${decoded.id}`}
-                        className={"px-5 py-3 hover:bg-gray-300"}>
-                        Tài khoản
-                      </NavLink>
+                      {
+                        decoded?.role === "ADMIN" && (
+                          <NavLink
+                            to={`/management/user`}
+                            className={"px-5 py-3 hover:bg-gray-300"}>
+                            Quản lý
+                          </NavLink>
+                        )
+                      }
                     </>
                   )}
-                  <NavLink
-                    to={`/management/user`}
-                    className={"px-5 py-3 hover:bg-gray-300"}>
-                    Quản lý
-                  </NavLink>
                 </div>
               )}
             </div>

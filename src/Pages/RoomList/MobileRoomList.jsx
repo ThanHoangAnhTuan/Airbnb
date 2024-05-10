@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../../utils/config";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-/**
- * Anh chuyển qua trang room list dùm e với key rồi, h e sử dụng useParams lấy cái key đó về, xong tìm trong danh sách phòng,
- * phòng nào có vị trí gần giống (chỉ cần so sánh có khớp là được, không cần giống 100%, so giống bên home anh so á)
- * location.tinhThanh.toLowerCase().includes(value.trim().toLowerCase())
- * sau đó e render danh sách phòng ra
- * ok không???
- * Tạm thời mình để cái google map là tĩnh đi, không cần động, sau này còn time thì thêm vào sau
- */
+
 const MobileRoomList = () => {
   const { cityName } = useParams();
   const [arrListRoom, setArrListRoom] = useState([]);
@@ -73,10 +66,9 @@ const MobileRoomList = () => {
               to="/"
               className="text-4xl text-pink-500">
               <i className="fa-brands fa-airbnb"></i>
-              
+              <span> airbnb</span>
             </NavLink>
           </div>
-          
           <div className="flex items-center justify-between text-black">
             <NavLink className="text-base">Đón tiếp khách</NavLink>
             <NavLink className="mx-5">
@@ -119,6 +111,15 @@ const MobileRoomList = () => {
                         className={"px-5 py-3 hover:bg-gray-300"}>
                         Tài khoản
                       </NavLink>
+                      {
+                        decoded?.role === "ADMIN" && (
+                          <NavLink
+                            to={`/management/user`}
+                            className={"px-5 py-3 hover:bg-gray-300"}>
+                            Quản lý
+                          </NavLink>
+                        )
+                      }
                     </>
                   )}
                 </div>

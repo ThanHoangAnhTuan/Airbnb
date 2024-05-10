@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import api from "../../utils/config";
 import "./home.css";
+import { jwtDecode } from "jwt-decode";
 
 const Home = () => {
   const searchRef = useRef();
@@ -13,7 +14,7 @@ const Home = () => {
   const isLogin = token ? true : false;
   let decoded;
   if (token) {
-    decoded = JSON.parse(atob(token?.split(".")[1]));
+    decoded = jwtDecode(token);
   }
   const navigate = useNavigate();
   const [nearbyLocation, setNearbyLocation] = useState([]);
@@ -126,11 +127,16 @@ const Home = () => {
                         </NavLink>
                       </>
                     )}
-                    <NavLink
-                      to={`/management/user`}
-                      className={"px-5 py-3 hover:bg-gray-300"}>
-                      Quản lý
-                    </NavLink>
+                    {
+                      decoded?.role === "ADMIN" && (
+                        <NavLink
+                          to={`/management/user`}
+                          className={"px-5 py-3 hover:bg-gray-300"}>
+                          Quản lý
+                        </NavLink>
+                      )
+                    }
+
                   </div>
                 )}
               </div>

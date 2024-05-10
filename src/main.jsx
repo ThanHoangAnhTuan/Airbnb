@@ -27,6 +27,8 @@ import Management from "./Templates/Management";
 import LocationManagement from "./Pages/LocationManagement/LocationManagement";
 import RoomManagement from "./Pages/RoomManagement/RoomManagement";
 import BookRoomManagement from "./Pages/BookRoomManagement/BookRoomManagement";
+import TabletManagement from "./Templates/TabletManagement";
+import MobileManagement from "./Templates/MobileManagement";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -94,7 +96,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         />
         <Route
           path="management"
-          element={<Management />}>
+          element={<Responsive
+            laptop={<Management />}
+            tablet={<TabletManagement />}
+            mobile={<MobileManagement />}
+          />}>
           <Route
             path="user"
             element={<UserManagement />}
